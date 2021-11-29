@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+package regen.ecocredit.v1alpha2;
+
+import "cosmos/base/v1beta1/coin.proto";
+import "gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/regen-network/regen-ledger/x/divvy";
+
+message AllocatorEntry {
+  // endeavor wallet address
+  string endeavor = 1;
+
+  // allocation share. 100% = 1e6.
+  uint32 share = 2;
+}
+
+message Allocator {
+  // admin is the address of the account that creates the allocator and signs
+  // the message
+  string admin = 1;
+
+  google.protobuf.Timestamp start = 2
+      [ (gogoproto.nullable) = false, (gogoproto.stdtime) = true ];
+  google.protobuf.Timestamp end = 3
+      [ (gogoproto.nullable) = false, (gogoproto.stdtime) = true ];
+  // how often we do a distribution, min = 1s
+  google.protobuf.Duration interval = 4
+      [ (gogoproto.nullable) = false, (gogoproto.stdduration) = true ];
+
+  // name of the allocator
+  string name = 5;
+  // url with metadata
+  string url = 6;
+  bool paused = 7;
+
+  // Invariant:
+  // * sum of shares in entires must equal to 100% (1mln)
+  // list of allocation entries
+  repeated AllocatorEntry entries = 10 [ (gogoproto.nullable) = false ];
+}
+
+message SlowReleaseStream {
+  // signer and creator of the stream
+  string admin = 1;
+
+  // when the stream starts
+  google.protobuf.Timestamp start = 2
+      [ (gogoproto.nullable) = false, (gogoproto.stdtime) = true ];
+  // how often we do a distribution
+  google.protobuf.Duration interval = 3
+      [ (gogoproto.nullable) = false, (gogoproto.stdduration) = true ];
+  // Allocator address
+  string destination = 4;
+
+  // name of the allocator
+  string name = 5;
+  bool paused = 6;
+
+  oneof strategy {
+    // fixed amount of tokens streamed in each round. If there is a zero balance
+    // available then then nothing will be streamed. If only fraction is
+    // available then the it will be fully streamed.
+    string fixed_amount = 10;
+  }
+}
