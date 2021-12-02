@@ -10,8 +10,8 @@ import "google/protobuf/timestamp.proto";
 option go_package = "github.com/regen-network/regen-ledger/x/divvy";
 
 message Recipient {
-  // endeavor wallet address
-  string endeavor = 1;
+  // address wallet address
+  string address = 1;
 
   // allocation share. 100% = 1e6.
   uint32 share = 2;

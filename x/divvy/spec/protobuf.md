@@ -66,7 +66,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| endeavor | [string](#string) |  | endeavor wallet address |
+| address | [string](#string) |  | address wallet address |
 | share | [uint32](#uint32) |  | allocation share. 100% = 1e6. |
 
 

@@ -29,8 +29,8 @@ var _ = time.Kitchen
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 type Recipient struct {
-	// endeavor wallet address
-	Endeavor string `protobuf:"bytes,1,opt,name=endeavor,proto3" json:"endeavor,omitempty"`
+	// address wallet address
+	Address string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 	// allocation share. 100% = 1e6.
 	Share uint32 `protobuf:"varint,2,opt,name=share,proto3" json:"share,omitempty"`
 }
@@ -68,9 +68,9 @@ func (m *Recipient) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Recipient proto.InternalMessageInfo
 
-func (m *Recipient) GetEndeavor() string {
+func (m *Recipient) GetAddress() string {
 	if m != nil {
-		return m.Endeavor
+		return m.Address
 	}
 	return ""
 }
@@ -384,10 +384,10 @@ func (m *Recipient) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x10
 	}
-	if len(m.Endeavor) > 0 {
-		i -= len(m.Endeavor)
-		copy(dAtA[i:], m.Endeavor)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Endeavor)))
+	if len(m.Address) > 0 {
+		i -= len(m.Address)
+		copy(dAtA[i:], m.Address)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Address)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -596,7 +596,7 @@ func (m *Recipient) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = len(m.Endeavor)
+	l = len(m.Address)
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
@@ -721,7 +721,7 @@ func (m *Recipient) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Endeavor", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -749,7 +749,7 @@ func (m *Recipient) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Endeavor = string(dAtA[iNdEx:postIndex])
+			m.Address = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
 			if wireType != 0 {
