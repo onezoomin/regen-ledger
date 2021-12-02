@@ -58,7 +58,7 @@ func (m MsgCreateAllocator) ValidateExtra(ctx sdk.Context) error {
 	}
 }
 
-func ValidateEntries(entries []AllocatorEntry) error {
+func ValidateEntries(entries []Recipient) error {
 	const expected = 1_000_000
 	var sum uint32 = 0
 	for i := range entries {

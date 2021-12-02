@@ -20,7 +20,7 @@ service Msg {
   // module.
   rpc CreateAllocator(MsgCreateAllocator) returns (MsgCreateAllocatorResp);
 
-  // Updates all allocator settings except admin and entry map.
+  // Updates all allocator settings except admin and recipient map.
   rpc UpdateAllocatorSetting(MsgUpdateAllocatorSetting) returns (MsgEmptyResp);
 
   // Allocator owner can update the recipient list by setting a new
@@ -76,7 +76,7 @@ message MsgCreateAllocator {
   // url with metadata
   string url = 6;
 
-  repeated AllocatorEntry entries = 10 [ (gogoproto.nullable) = false ];
+  repeated Recipient entries = 10 [ (gogoproto.nullable) = false ];
 }
 
 // MsgCreateClassResponse is the Msg/CreateClass response type.
@@ -108,7 +108,7 @@ message MsgSetAllocationMap {
   // New allocator mapping.
   // Invariants:
   // * sum of shares in entires must equal to 100% (1mln)
-  repeated AllocatorEntry entries = 2 [ (gogoproto.nullable) = false ];
+  repeated Recipient entries = 2 [ (gogoproto.nullable) = false ];
 }
 
 message MsgRemoveAllocator {

@@ -9,7 +9,7 @@ import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/regen-network/regen-ledger/x/divvy";
 
-message AllocatorEntry {
+message Recipient {
   // endeavor wallet address
   string endeavor = 1;
 
@@ -39,7 +39,7 @@ message Allocator {
   // Invariant:
   // * sum of shares in entires must equal to 100% (1mln)
   // list of allocation entries
-  repeated AllocatorEntry entries = 10 [ (gogoproto.nullable) = false ];
+  repeated Recipient entries = 10 [ (gogoproto.nullable) = false ];
 }
 
 message SlowReleaseStream {
