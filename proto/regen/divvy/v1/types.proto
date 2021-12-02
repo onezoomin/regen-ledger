@@ -8,6 +8,7 @@ import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/regen-network/regen-ledger/x/divvy";
+option (gogoproto.goproto_getters_all) = false;
 
 message Recipient {
   // address wallet address

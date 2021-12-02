@@ -10,12 +10,13 @@ import "google/protobuf/timestamp.proto";
 import "regen/divvy/v1/types.proto";
 
 option go_package = "github.com/regen-network/regen-ledger/x/divvy";
+option (gogoproto.goproto_getters_all) = false;
 
 // Msg is the regen.ecocredit.v1alpha1 Msg service.
 service Msg {
 
   // Allocator is a distribution engine, which distributes everything which is
-  // comming in configurable interval periods to registered entries. Each
+  // comming in configurable interval periods to registered recipients. Each
   // allocator has only one owner. Ideally this can be managed by a group
   // module.
   rpc CreateAllocator(MsgCreateAllocator) returns (MsgCreateAllocatorResp);
@@ -58,11 +59,6 @@ message MsgCreateAllocator {
   // the message
   string admin = 1;
 
-  // Initial allocator mapping.
-  // Invariants:
-  // * sum of shares in entires must equal to 100% (1mln)
-  // list of allocation entries
-
   google.protobuf.Timestamp start = 2
       [ (gogoproto.nullable) = false, (gogoproto.stdtime) = true ];
   google.protobuf.Timestamp end = 3
@@ -76,7 +72,10 @@ message MsgCreateAllocator {
   // url with metadata
   string url = 6;
 
-  repeated Recipient entries = 10 [ (gogoproto.nullable) = false ];
+  // Initial allocator mapping.
+  // Invariants:
+  // * sum of shares in recipients must equal to 100% (1mln)
+  repeated Recipient recipients = 10 [ (gogoproto.nullable) = false ];
 }
 
 // MsgCreateClassResponse is the Msg/CreateClass response type.
@@ -107,8 +106,8 @@ message MsgSetAllocationMap {
   string sender = 1;
   // New allocator mapping.
   // Invariants:
-  // * sum of shares in entires must equal to 100% (1mln)
-  repeated Recipient entries = 2 [ (gogoproto.nullable) = false ];
+  // * sum of shares in recipients must equal to 100% (1mln)
+  repeated Recipient recipients = 2 [ (gogoproto.nullable) = false ];
 }
 
 message MsgRemoveAllocator {
@@ -128,6 +127,8 @@ message MsgCreateSlowReleaseStream {
       [ (gogoproto.nullable) = false, (gogoproto.stdduration) = true ];
   // Allocator address
   string destination = 4;
+  // when paused, stream won't send funds
+  bool paused = 5;
 
   oneof strategy {
     // fixed amount of tokens streamed in each round. If there is a zero balance

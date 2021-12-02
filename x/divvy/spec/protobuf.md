@@ -150,7 +150,7 @@ MsgCreateClass is the Msg/CreateClass request type.
 | interval | [google.protobuf.Duration](#google.protobuf.Duration) |  | how often we do a distribution |
 | name | [string](#string) |  | name of the allocator |
 | url | [string](#string) |  | url with metadata |
-| entries | [Recipient](#regen.ecocredit.v1alpha2.Recipient) | repeated |  |
+| recipients | [Recipient](#regen.ecocredit.v1alpha2.Recipient) | repeated | Initial allocator mapping. Invariants: * sum of shares in recipients must equal to 100% (1mln) |
 
 
 
@@ -184,6 +184,7 @@ MsgCreateClassResponse is the Msg/CreateClass response type.
 | start | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  | when the stream starts |
 | interval | [google.protobuf.Duration](#google.protobuf.Duration) |  | how often we do a distribution |
 | destination | [string](#string) |  | Allocator address |
+| paused | [bool](#bool) |  | when paused, stream won't send funds |
 | fixed_amount | [string](#string) |  | fixed amount of tokens streamed in each round. If there is a zero balance available then then nothing will be streamed. If only fraction is available then the it will be fully streamed. |
 
 
@@ -260,7 +261,7 @@ MsgCreateClassResponse is the Msg/CreateClass response type.
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | sender | [string](#string) |  | sender must the the Allocator admin |
-| entries | [Recipient](#regen.ecocredit.v1alpha2.Recipient) | repeated | New allocator mapping. Invariants: * sum of shares in entires must equal to 100% (1mln) |
+| recipients | [Recipient](#regen.ecocredit.v1alpha2.Recipient) | repeated | New allocator mapping. Invariants: * sum of shares in recipients must equal to 100% (1mln) |
 
 
 
@@ -300,7 +301,7 @@ Msg is the regen.ecocredit.v1alpha1 Msg service.
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| CreateAllocator | [MsgCreateAllocator](#regen.ecocredit.v1alpha2.MsgCreateAllocator) | [MsgCreateAllocatorResp](#regen.ecocredit.v1alpha2.MsgCreateAllocatorResp) | Allocator is a distribution engine, which distributes everything which is comming in configurable interval periods to registered entries. Each allocator has only one owner. Ideally this can be managed by a group module. |
+| CreateAllocator | [MsgCreateAllocator](#regen.ecocredit.v1alpha2.MsgCreateAllocator) | [MsgCreateAllocatorResp](#regen.ecocredit.v1alpha2.MsgCreateAllocatorResp) | Allocator is a distribution engine, which distributes everything which is comming in configurable interval periods to registered recipients. Each allocator has only one owner. Ideally this can be managed by a group module. |
 | UpdateAllocatorSetting | [MsgUpdateAllocatorSetting](#regen.ecocredit.v1alpha2.MsgUpdateAllocatorSetting) | [MsgEmptyResp](#regen.ecocredit.v1alpha2.MsgEmptyResp) | Updates all allocator settings except admin and recipient map. |
 | SetAllocationMap | [MsgSetAllocationMap](#regen.ecocredit.v1alpha2.MsgSetAllocationMap) | [MsgEmptyResp](#regen.ecocredit.v1alpha2.MsgEmptyResp) | Allocator owner can update the recipient list by setting a new allocation map. |
 | RemoveAllocator | [MsgRemoveAllocator](#regen.ecocredit.v1alpha2.MsgRemoveAllocator) | [MsgCreateAllocatorResp](#regen.ecocredit.v1alpha2.MsgCreateAllocatorResp) | Removes allocator and disables all streamers! |
