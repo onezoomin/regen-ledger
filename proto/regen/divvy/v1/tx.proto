@@ -15,10 +15,10 @@ option (gogoproto.goproto_getters_all) = false;
 // Msg is the regen.ecocredit.v1alpha1 Msg service.
 service Msg {
 
-  // Allocator is a distribution engine, which distributes everything which is
-  // comming in configurable interval periods to registered recipients. Each
-  // allocator has only one owner. Ideally this can be managed by a group
-  // module.
+  // Allocator is a distribution engine, which "divvys out" all incoming funds,
+  // at configurable time intervals to all registered recipients. 
+  // Each allocator has only one owner. 
+  // Ideally this can be managed by a group module.
   rpc CreateAllocator(MsgCreateAllocator) returns (MsgCreateAllocatorResp);
 
   // Updates all allocator settings except admin and recipient map.
