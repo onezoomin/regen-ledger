@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package regen.ecocredit.v1alpha2;
+package regen.divvy.v1;
 
 import "cosmos/base/v1beta1/coin.proto";
 import "gogoproto/gogo.proto";
@@ -11,7 +11,7 @@ import "regen/divvy/v1/types.proto";
 
 option go_package = "github.com/regen-network/regen-ledger/x/divvy";
 
-// Msg is the regen.ecocredit.v1alpha1 Msg service.
+// Msg is the divvy Msg service.
 service Query {
   // Queries:
   // + Get allocators by owner
