@@ -24,6 +24,7 @@ require (
 
 require (
 	github.com/gogo/protobuf v1.3.3
+	github.com/grpc-ecosystem/grpc-gateway v1.16.0
 	github.com/regen-network/regen-ledger/orm v0.0.0-00010101000000-000000000000
 	google.golang.org/grpc v1.40.0
 )
@@ -70,7 +71,6 @@ require (
 	github.com/gorilla/handlers v1.5.1 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0 // indirect
-	github.com/grpc-ecosystem/grpc-gateway v1.16.0 // indirect
 	github.com/gsterjov/go-libsecret v0.0.0-20161001094733-a6f4afe4910c // indirect
 	github.com/gtank/merlin v0.1.1 // indirect
 	github.com/gtank/ristretto255 v0.1.2 // indirect

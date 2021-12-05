@@ -92,6 +92,8 @@ import (
 	dbm "github.com/tendermint/tm-db"
 
 	"github.com/regen-network/regen-ledger/types/module/server"
+	"github.com/regen-network/regen-ledger/v2/x/divvy"
+	divvymodule "github.com/regen-network/regen-ledger/v2/x/divvy/module"
 	"github.com/regen-network/regen-ledger/x/ecocredit"
 	ecocreditmodule "github.com/regen-network/regen-ledger/x/ecocredit/module"
 
@@ -133,6 +135,7 @@ var (
 			feegrantmodule.AppModuleBasic{},
 			authzmodule.AppModuleBasic{},
 			ecocreditmodule.Module{},
+			divvymodule.Module{},
 		}, setCustomModuleBasics()...)...,
 	)
 
@@ -146,6 +149,7 @@ var (
 		govtypes.ModuleName:            {authtypes.Burner},
 		ibctransfertypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
 		ecocredit.ModuleName:           {authtypes.Burner},
+		divvy.ModuleName:               {authtypes.Minter, authtypes.Burner},
 	}
 )
 
@@ -360,7 +364,9 @@ func NewRegenApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest 
 		app.AccountKeeper,
 		app.BankKeeper,
 	)
-	newModules := []moduletypes.Module{ecocreditModule}
+	divvyModule := divvymodule.NewModule(app.BankKeeper)
+
+	newModules := []moduletypes.Module{ecocreditModule, divvyModule}
 	err := app.smm.RegisterModules(newModules)
 	if err != nil {
 		panic(err)
@@ -448,6 +454,7 @@ func NewRegenApp(logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest 
 			ibc.NewAppModule(app.IBCKeeper),
 			transferModule,
 			ecocreditmodule.NewModule(app.GetSubspace(ecocredit.DefaultParamspace), app.AccountKeeper, app.BankKeeper),
+			// TODO: add divvy simulations
 		}, app.setCustomSimulationManager()...)...,
 	)
 

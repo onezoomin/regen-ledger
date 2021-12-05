@@ -5,7 +5,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/regen-network/regen-ledger/orm"
-	servermodule "github.com/regen-network/regen-ledger/types/module/server"
+	"github.com/regen-network/regen-ledger/types/module/server"
 	"github.com/regen-network/regen-ledger/v2/x/divvy"
 	"github.com/regen-network/regen-ledger/x/group/exported"
 )
@@ -27,8 +27,8 @@ type serverImpl struct {
 	streamTable    orm.AutoUInt64Table
 }
 
-func newServer(storeKey servermodule.RootModuleKey, bankKeeper exported.BankKeeper, cdc codec.Codec) (serverImpl, error) {
-	s := serverImpl{key: storeKey, bankKeeper: bankKeeper}
+func newServer(storeKey server.RootModuleKey, bank exported.BankKeeper, cdc codec.Codec) (serverImpl, error) {
+	s := serverImpl{key: storeKey, bankKeeper: bank}
 	allocatorTable, err := orm.NewAutoUInt64TableBuilder(allocatorTablePrefix, allocatorTableSeqPrefix, storeKey, &divvy.Allocator{}, cdc)
 	if err != nil {
 		return s, err
@@ -42,4 +42,18 @@ func newServer(storeKey servermodule.RootModuleKey, bankKeeper exported.BankKeep
 	s.streamTable = streamTable.Build()
 
 	return s, nil
+}
+
+func RegisterServices(configurator server.Configurator, bank divvy.BankKeeper) error {
+	impl, err := newServer(configurator.ModuleKey(), bank, configurator.Marshaler())
+	if err != nil {
+		return err
+	}
+	divvy.RegisterMsgServer(configurator.MsgServer(), impl)
+	divvy.RegisterQueryServer(configurator.QueryServer(), impl)
+	configurator.RegisterGenesisHandlers(impl.InitGenesis, impl.ExportGenesis)
+	// TODO:
+	// configurator.RegisterWeightedOperationsHandler(impl.WeightedOperations)
+	// configurator.RegisterInvariantsHandler(impl.RegisterInvariants)
+	return nil
 }
