@@ -73,15 +73,15 @@ var xxx_messageInfo_MsgEmptyResp proto.InternalMessageInfo
 type MsgCreateAllocator struct {
 	// admin is the address of the account that creates the allocator and signs
 	// the message
-	Admin string    `protobuf:"bytes,1,opt,name=admin,proto3" json:"admin,omitempty"`
-	Start time.Time `protobuf:"bytes,2,opt,name=start,proto3,stdtime" json:"start"`
-	End   time.Time `protobuf:"bytes,3,opt,name=end,proto3,stdtime" json:"end"`
+	Admin string    `protobuf:"bytes,2,opt,name=admin,proto3" json:"admin,omitempty"`
+	Start time.Time `protobuf:"bytes,3,opt,name=start,proto3,stdtime" json:"start"`
+	End   time.Time `protobuf:"bytes,4,opt,name=end,proto3,stdtime" json:"end"`
 	// how often we do a distribution
-	Interval time.Duration `protobuf:"bytes,4,opt,name=interval,proto3,stdduration" json:"interval"`
+	Interval time.Duration `protobuf:"bytes,5,opt,name=interval,proto3,stdduration" json:"interval"`
 	// name of the allocator
-	Name string `protobuf:"bytes,5,opt,name=name,proto3" json:"name,omitempty"`
+	Name string `protobuf:"bytes,6,opt,name=name,proto3" json:"name,omitempty"`
 	// url with metadata
-	Url string `protobuf:"bytes,6,opt,name=url,proto3" json:"url,omitempty"`
+	Url string `protobuf:"bytes,7,opt,name=url,proto3" json:"url,omitempty"`
 	// Initial allocator mapping.
 	// Invariants:
 	// * sum of shares in recipients must equal to 100% (1mln)
@@ -121,10 +121,10 @@ func (m *MsgCreateAllocator) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgCreateAllocator proto.InternalMessageInfo
 
-// MsgCreateClassResponse is the Msg/CreateClass response type.
+// MsgCreateClassResponse is the Msg/CreateAllocator response type.
 type MsgCreateAllocatorResp struct {
 	// id is the unique ID of the newly created allocator.
-	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 }
 
 func (m *MsgCreateAllocatorResp) Reset()         { *m = MsgCreateAllocatorResp{} }
@@ -161,16 +161,18 @@ func (m *MsgCreateAllocatorResp) XXX_DiscardUnknown() {
 var xxx_messageInfo_MsgCreateAllocatorResp proto.InternalMessageInfo
 
 type MsgUpdateAllocatorSetting struct {
+	// id of the allocator
+	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	// sender must the the Allocator admin
-	Sender string    `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-	Start  time.Time `protobuf:"bytes,2,opt,name=start,proto3,stdtime" json:"start"`
-	End    time.Time `protobuf:"bytes,3,opt,name=end,proto3,stdtime" json:"end"`
-	// how often we do a distribution, min 1s
-	Interval time.Duration `protobuf:"bytes,4,opt,name=interval,proto3,stdduration" json:"interval"`
+	Sender string    `protobuf:"bytes,2,opt,name=sender,proto3" json:"sender,omitempty"`
+	Start  time.Time `protobuf:"bytes,3,opt,name=start,proto3,stdtime" json:"start"`
+	End    time.Time `protobuf:"bytes,4,opt,name=end,proto3,stdtime" json:"end"`
+	// how often we do a distribution
+	Interval time.Duration `protobuf:"bytes,5,opt,name=interval,proto3,stdduration" json:"interval"`
 	// name of the allocator
-	Name string `protobuf:"bytes,5,opt,name=name,proto3" json:"name,omitempty"`
+	Name string `protobuf:"bytes,6,opt,name=name,proto3" json:"name,omitempty"`
 	// url with metadata
-	Url string `protobuf:"bytes,6,opt,name=url,proto3" json:"url,omitempty"`
+	Url string `protobuf:"bytes,7,opt,name=url,proto3" json:"url,omitempty"`
 }
 
 func (m *MsgUpdateAllocatorSetting) Reset()         { *m = MsgUpdateAllocatorSetting{} }
@@ -207,12 +209,14 @@ func (m *MsgUpdateAllocatorSetting) XXX_DiscardUnknown() {
 var xxx_messageInfo_MsgUpdateAllocatorSetting proto.InternalMessageInfo
 
 type MsgSetAllocationMap struct {
+	// id of the allocator
+	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	// sender must the the Allocator admin
-	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	Sender string `protobuf:"bytes,2,opt,name=sender,proto3" json:"sender,omitempty"`
 	// New allocator mapping.
 	// Invariants:
 	// * sum of shares in recipients must equal to 100% (1mln)
-	Recipients []Recipient `protobuf:"bytes,2,rep,name=recipients,proto3" json:"recipients"`
+	Recipients []Recipient `protobuf:"bytes,3,rep,name=recipients,proto3" json:"recipients"`
 }
 
 func (m *MsgSetAllocationMap) Reset()         { *m = MsgSetAllocationMap{} }
@@ -249,8 +253,10 @@ func (m *MsgSetAllocationMap) XXX_DiscardUnknown() {
 var xxx_messageInfo_MsgSetAllocationMap proto.InternalMessageInfo
 
 type MsgRemoveAllocator struct {
+	// id of the allocator
+	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	// sender must the the Allocator admin
-	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	Sender string `protobuf:"bytes,2,opt,name=sender,proto3" json:"sender,omitempty"`
 }
 
 func (m *MsgRemoveAllocator) Reset()         { *m = MsgRemoveAllocator{} }
@@ -288,15 +294,15 @@ var xxx_messageInfo_MsgRemoveAllocator proto.InternalMessageInfo
 
 type MsgCreateSlowReleaseStream struct {
 	// signer and creator of the stream
-	Admin string `protobuf:"bytes,1,opt,name=admin,proto3" json:"admin,omitempty"`
+	Admin string `protobuf:"bytes,2,opt,name=admin,proto3" json:"admin,omitempty"`
 	// when the stream starts
-	Start time.Time `protobuf:"bytes,2,opt,name=start,proto3,stdtime" json:"start"`
+	Start time.Time `protobuf:"bytes,3,opt,name=start,proto3,stdtime" json:"start"`
 	// how often we do a distribution
-	Interval time.Duration `protobuf:"bytes,3,opt,name=interval,proto3,stdduration" json:"interval"`
+	Interval time.Duration `protobuf:"bytes,4,opt,name=interval,proto3,stdduration" json:"interval"`
 	// Allocator address
-	Destination string `protobuf:"bytes,4,opt,name=destination,proto3" json:"destination,omitempty"`
+	Destination string `protobuf:"bytes,5,opt,name=destination,proto3" json:"destination,omitempty"`
 	// when paused, stream won't send funds
-	Paused bool `protobuf:"varint,5,opt,name=paused,proto3" json:"paused,omitempty"`
+	Paused bool `protobuf:"varint,6,opt,name=paused,proto3" json:"paused,omitempty"`
 	// Types that are valid to be assigned to Strategy:
 	//	*MsgCreateSlowReleaseStream_FixedAmount
 	Strategy isMsgCreateSlowReleaseStream_Strategy `protobuf_oneof:"strategy"`
@@ -368,18 +374,60 @@ func (*MsgCreateSlowReleaseStream) XXX_OneofWrappers() []interface{} {
 	}
 }
 
+// MsgCreateSlowReleaseStreamResp is response for
+// Msg/CreateSlowReleaseStreamResp
+type MsgCreateSlowReleaseStreamResp struct {
+	// id is the unique ID of the newly created stream.
+	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+}
+
+func (m *MsgCreateSlowReleaseStreamResp) Reset()         { *m = MsgCreateSlowReleaseStreamResp{} }
+func (m *MsgCreateSlowReleaseStreamResp) String() string { return proto.CompactTextString(m) }
+func (*MsgCreateSlowReleaseStreamResp) ProtoMessage()    {}
+func (*MsgCreateSlowReleaseStreamResp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_bab1ab9b32c81971, []int{7}
+}
+func (m *MsgCreateSlowReleaseStreamResp) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgCreateSlowReleaseStreamResp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgCreateSlowReleaseStreamResp.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgCreateSlowReleaseStreamResp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgCreateSlowReleaseStreamResp.Merge(m, src)
+}
+func (m *MsgCreateSlowReleaseStreamResp) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgCreateSlowReleaseStreamResp) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgCreateSlowReleaseStreamResp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgCreateSlowReleaseStreamResp proto.InternalMessageInfo
+
 type MsgPauseSlowReleaseStream struct {
+	// id of the stream
+	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	// sender must the the Stream admin
-	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	Sender string `protobuf:"bytes,2,opt,name=sender,proto3" json:"sender,omitempty"`
 	// the pause value to set
-	Paused bool `protobuf:"varint,2,opt,name=paused,proto3" json:"paused,omitempty"`
+	Paused bool `protobuf:"varint,3,opt,name=paused,proto3" json:"paused,omitempty"`
 }
 
 func (m *MsgPauseSlowReleaseStream) Reset()         { *m = MsgPauseSlowReleaseStream{} }
 func (m *MsgPauseSlowReleaseStream) String() string { return proto.CompactTextString(m) }
 func (*MsgPauseSlowReleaseStream) ProtoMessage()    {}
 func (*MsgPauseSlowReleaseStream) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bab1ab9b32c81971, []int{7}
+	return fileDescriptor_bab1ab9b32c81971, []int{8}
 }
 func (m *MsgPauseSlowReleaseStream) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -409,14 +457,18 @@ func (m *MsgPauseSlowReleaseStream) XXX_DiscardUnknown() {
 var xxx_messageInfo_MsgPauseSlowReleaseStream proto.InternalMessageInfo
 
 type MsgEditSlowReleaseStream struct {
+	// id of the stream
+	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	// sender must the the Stream admin
-	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	Sender string `protobuf:"bytes,2,opt,name=sender,proto3" json:"sender,omitempty"`
 	// when the stream starts
-	Start time.Time `protobuf:"bytes,2,opt,name=start,proto3,stdtime" json:"start"`
+	Start time.Time `protobuf:"bytes,3,opt,name=start,proto3,stdtime" json:"start"`
 	// how often we do a distribution
-	Interval time.Duration `protobuf:"bytes,3,opt,name=interval,proto3,stdduration" json:"interval"`
+	Interval time.Duration `protobuf:"bytes,4,opt,name=interval,proto3,stdduration" json:"interval"`
 	// Allocator address
-	Destination string `protobuf:"bytes,4,opt,name=destination,proto3" json:"destination,omitempty"`
+	Destination string `protobuf:"bytes,5,opt,name=destination,proto3" json:"destination,omitempty"`
+	// when paused, stream won't send funds
+	Paused bool `protobuf:"varint,6,opt,name=paused,proto3" json:"paused,omitempty"`
 	// Types that are valid to be assigned to Strategy:
 	//	*MsgEditSlowReleaseStream_FixedAmount
 	Strategy isMsgEditSlowReleaseStream_Strategy `protobuf_oneof:"strategy"`
@@ -426,7 +478,7 @@ func (m *MsgEditSlowReleaseStream) Reset()         { *m = MsgEditSlowReleaseStre
 func (m *MsgEditSlowReleaseStream) String() string { return proto.CompactTextString(m) }
 func (*MsgEditSlowReleaseStream) ProtoMessage()    {}
 func (*MsgEditSlowReleaseStream) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bab1ab9b32c81971, []int{8}
+	return fileDescriptor_bab1ab9b32c81971, []int{9}
 }
 func (m *MsgEditSlowReleaseStream) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -489,68 +541,69 @@ func (*MsgEditSlowReleaseStream) XXX_OneofWrappers() []interface{} {
 }
 
 func init() {
-	proto.RegisterType((*MsgEmptyResp)(nil), "regen.ecocredit.v1alpha2.MsgEmptyResp")
-	proto.RegisterType((*MsgCreateAllocator)(nil), "regen.ecocredit.v1alpha2.MsgCreateAllocator")
-	proto.RegisterType((*MsgCreateAllocatorResp)(nil), "regen.ecocredit.v1alpha2.MsgCreateAllocatorResp")
-	proto.RegisterType((*MsgUpdateAllocatorSetting)(nil), "regen.ecocredit.v1alpha2.MsgUpdateAllocatorSetting")
-	proto.RegisterType((*MsgSetAllocationMap)(nil), "regen.ecocredit.v1alpha2.MsgSetAllocationMap")
-	proto.RegisterType((*MsgRemoveAllocator)(nil), "regen.ecocredit.v1alpha2.MsgRemoveAllocator")
-	proto.RegisterType((*MsgCreateSlowReleaseStream)(nil), "regen.ecocredit.v1alpha2.MsgCreateSlowReleaseStream")
-	proto.RegisterType((*MsgPauseSlowReleaseStream)(nil), "regen.ecocredit.v1alpha2.MsgPauseSlowReleaseStream")
-	proto.RegisterType((*MsgEditSlowReleaseStream)(nil), "regen.ecocredit.v1alpha2.MsgEditSlowReleaseStream")
+	proto.RegisterType((*MsgEmptyResp)(nil), "regen.divvy.v1.MsgEmptyResp")
+	proto.RegisterType((*MsgCreateAllocator)(nil), "regen.divvy.v1.MsgCreateAllocator")
+	proto.RegisterType((*MsgCreateAllocatorResp)(nil), "regen.divvy.v1.MsgCreateAllocatorResp")
+	proto.RegisterType((*MsgUpdateAllocatorSetting)(nil), "regen.divvy.v1.MsgUpdateAllocatorSetting")
+	proto.RegisterType((*MsgSetAllocationMap)(nil), "regen.divvy.v1.MsgSetAllocationMap")
+	proto.RegisterType((*MsgRemoveAllocator)(nil), "regen.divvy.v1.MsgRemoveAllocator")
+	proto.RegisterType((*MsgCreateSlowReleaseStream)(nil), "regen.divvy.v1.MsgCreateSlowReleaseStream")
+	proto.RegisterType((*MsgCreateSlowReleaseStreamResp)(nil), "regen.divvy.v1.MsgCreateSlowReleaseStreamResp")
+	proto.RegisterType((*MsgPauseSlowReleaseStream)(nil), "regen.divvy.v1.MsgPauseSlowReleaseStream")
+	proto.RegisterType((*MsgEditSlowReleaseStream)(nil), "regen.divvy.v1.MsgEditSlowReleaseStream")
 }
 
 func init() { proto.RegisterFile("regen/divvy/v1/tx.proto", fileDescriptor_bab1ab9b32c81971) }
 
 var fileDescriptor_bab1ab9b32c81971 = []byte{
-	// 737 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xdc, 0x96, 0xcf, 0x6f, 0xda, 0x48,
-	0x14, 0xc7, 0xc1, 0x24, 0x88, 0x3c, 0xa2, 0x24, 0xf2, 0x66, 0x89, 0xc3, 0xc1, 0x41, 0x8e, 0xb4,
-	0xe2, 0x90, 0xd8, 0x0b, 0x59, 0xed, 0x61, 0x2f, 0xab, 0xb0, 0xbb, 0xd2, 0x56, 0x11, 0x52, 0x65,
-	0xda, 0x4b, 0x2f, 0xd5, 0x80, 0x5f, 0x9c, 0x51, 0x6d, 0x8f, 0xe3, 0x19, 0x13, 0xb8, 0xf6, 0x0f,
-	0xa8, 0x72, 0xac, 0xfa, 0x67, 0xf4, 0xaf, 0xc8, 0x31, 0xc7, 0x9e, 0xfa, 0x23, 0xf9, 0x47, 0x2a,
-	0x0f, 0x26, 0xa5, 0x80, 0x11, 0x49, 0x55, 0xa9, 0xea, 0x6d, 0xe6, 0xcd, 0xfb, 0xbc, 0x37, 0xf3,
-	0x7d, 0x7e, 0x0f, 0x60, 0x27, 0x42, 0x17, 0x03, 0xcb, 0xa1, 0xfd, 0xfe, 0xd0, 0xea, 0x37, 0x2c,
-	0x31, 0x30, 0xc3, 0x88, 0x09, 0xa6, 0x6a, 0xf2, 0xc0, 0xc4, 0x1e, 0xeb, 0x45, 0xe8, 0x50, 0x61,
-	0xf6, 0x1b, 0xc4, 0x0b, 0xcf, 0x48, 0xb3, 0xaa, 0xf7, 0x18, 0xf7, 0x19, 0xb7, 0xba, 0x84, 0xa3,
-	0xd5, 0x6f, 0x74, 0x51, 0x90, 0x86, 0xd5, 0x63, 0x34, 0x18, 0x91, 0xd5, 0x6d, 0x97, 0xb9, 0x4c,
-	0x2e, 0xad, 0x64, 0x95, 0x5a, 0x75, 0x97, 0x31, 0xd7, 0x43, 0x4b, 0xee, 0xba, 0xf1, 0xa9, 0xe5,
-	0xc4, 0x11, 0x11, 0x94, 0x8d, 0xa9, 0xbd, 0xe9, 0x73, 0x41, 0x7d, 0xe4, 0x82, 0xf8, 0x61, 0xea,
-	0x50, 0x9d, 0xbe, 0xe9, 0x30, 0x44, 0x3e, 0x3a, 0x33, 0x36, 0x60, 0xbd, 0xcd, 0xdd, 0xff, 0xfc,
-	0x50, 0x0c, 0x6d, 0xe4, 0xa1, 0x71, 0xad, 0x80, 0xda, 0xe6, 0xee, 0x3f, 0x11, 0x12, 0x81, 0xc7,
-	0x9e, 0xc7, 0x7a, 0x44, 0xb0, 0x48, 0xdd, 0x86, 0x55, 0xe2, 0xf8, 0x34, 0xd0, 0xf2, 0xb5, 0x7c,
-	0x7d, 0xcd, 0x1e, 0x6d, 0xd4, 0xbf, 0x60, 0x95, 0x0b, 0x12, 0x09, 0x4d, 0xa9, 0xe5, 0xeb, 0xe5,
-	0x66, 0xd5, 0x1c, 0xdd, 0xc4, 0x1c, 0xdf, 0xc4, 0x7c, 0x32, 0xbe, 0x49, 0xab, 0x74, 0xf5, 0x7e,
-	0x2f, 0x77, 0xf9, 0x61, 0x2f, 0x6f, 0x8f, 0x10, 0xf5, 0x4f, 0x28, 0x60, 0xe0, 0x68, 0x85, 0x7b,
-	0x90, 0x09, 0xa0, 0xfe, 0x0d, 0x25, 0x1a, 0x08, 0x8c, 0xfa, 0xc4, 0xd3, 0x56, 0x24, 0xbc, 0x3b,
-	0x03, 0xff, 0x9b, 0x0a, 0x34, 0x62, 0x5f, 0x27, 0xec, 0x1d, 0xa4, 0xaa, 0xb0, 0x12, 0x10, 0x1f,
-	0xb5, 0x55, 0xf9, 0x12, 0xb9, 0x56, 0xb7, 0xa0, 0x10, 0x47, 0x9e, 0x56, 0x94, 0xa6, 0x64, 0xa9,
-	0x3e, 0x02, 0x88, 0xb0, 0x47, 0x43, 0x8a, 0x81, 0xe0, 0x1a, 0xd4, 0x0a, 0xf5, 0x72, 0x73, 0xdf,
-	0xcc, 0xaa, 0xac, 0x69, 0x8f, 0x7d, 0x5b, 0x2b, 0x49, 0x4a, 0x7b, 0x02, 0x36, 0xea, 0x50, 0x99,
-	0x55, 0x34, 0x11, 0x5b, 0xdd, 0x00, 0x85, 0x3a, 0xa9, 0xa4, 0x0a, 0x75, 0x8c, 0x57, 0x0a, 0xec,
-	0xb6, 0xb9, 0xfb, 0x34, 0x74, 0x26, 0x5d, 0x3b, 0x28, 0x04, 0x0d, 0x5c, 0xb5, 0x02, 0x45, 0x8e,
-	0x81, 0x83, 0x51, 0x4a, 0xa4, 0xbb, 0x9f, 0xb8, 0x0a, 0xc6, 0x00, 0x7e, 0x69, 0x73, 0xb7, 0x83,
-	0x22, 0x15, 0x83, 0xb2, 0xa0, 0x4d, 0xc2, 0x4c, 0x25, 0xbe, 0x2e, 0x9a, 0xf2, 0x2d, 0x45, 0x3b,
-	0x90, 0x6d, 0x60, 0xa3, 0xcf, 0xfa, 0x13, 0x6d, 0x90, 0x91, 0xd8, 0x78, 0xa3, 0x40, 0xf5, 0xae,
-	0xc6, 0x1d, 0x8f, 0x5d, 0xd8, 0xe8, 0x21, 0xe1, 0xd8, 0x11, 0x11, 0x12, 0xff, 0x3b, 0x74, 0xcf,
-	0xa4, 0xfe, 0x85, 0x87, 0xe8, 0x5f, 0x83, 0xb2, 0x83, 0x5c, 0xd0, 0x40, 0xba, 0xc8, 0x1a, 0xae,
-	0xd9, 0x93, 0xa6, 0xe4, 0xad, 0x21, 0x89, 0x39, 0x3a, 0xb2, 0x46, 0x25, 0x3b, 0xdd, 0xa9, 0xfb,
-	0xb0, 0x7e, 0x4a, 0x07, 0xe8, 0x3c, 0x27, 0x3e, 0x8b, 0x03, 0xa1, 0x41, 0x82, 0xfe, 0x9f, 0xb3,
-	0xcb, 0xd2, 0x7a, 0x2c, 0x8d, 0x2d, 0x80, 0x12, 0x17, 0x11, 0x11, 0xe8, 0x0e, 0x8d, 0x13, 0xf9,
-	0x51, 0x3f, 0x4e, 0xe8, 0x59, 0x69, 0xb2, 0x4a, 0xf9, 0x25, 0xbb, 0x32, 0x99, 0xdd, 0x78, 0xa9,
-	0x80, 0x96, 0x0c, 0x2c, 0x87, 0x8a, 0xe5, 0x83, 0xfd, 0xe0, 0x4a, 0xdf, 0x57, 0xd1, 0xe6, 0xdb,
-	0x22, 0x14, 0xda, 0xdc, 0x55, 0xcf, 0x61, 0x73, 0x7a, 0x50, 0x1f, 0x64, 0x7f, 0xee, 0xb3, 0x43,
-	0xa8, 0xfa, 0xfb, 0x7d, 0xbc, 0xe5, 0xc8, 0x8a, 0xa1, 0x92, 0x31, 0x9e, 0x8e, 0x16, 0xc6, 0x9a,
-	0x0f, 0x55, 0x7f, 0x5b, 0x08, 0xdd, 0xfd, 0x2c, 0xa9, 0x14, 0xb6, 0x66, 0xa6, 0xc0, 0xe1, 0x42,
-	0x76, 0xda, 0x7d, 0xe9, 0x54, 0xe7, 0xb0, 0x39, 0xdd, 0xf6, 0x8b, 0x45, 0x9d, 0xf2, 0x7e, 0x80,
-	0xa8, 0x17, 0xb0, 0x93, 0x35, 0x3a, 0xfe, 0x58, 0x22, 0xd8, 0x0c, 0xb5, 0xf4, 0x5b, 0x63, 0xa8,
-	0x64, 0xf4, 0xe5, 0xe2, 0x6a, 0xce, 0x87, 0x96, 0x4e, 0xcb, 0xe1, 0xd7, 0xf9, 0x0d, 0xdc, 0x5c,
-	0x1c, 0x60, 0x1e, 0xb3, 0x6c, 0xd2, 0xd6, 0xc9, 0xd5, 0x27, 0x3d, 0x77, 0x75, 0xa3, 0xe7, 0xaf,
-	0x6f, 0xf4, 0xfc, 0xc7, 0x1b, 0x3d, 0x7f, 0x79, 0xab, 0xe7, 0xae, 0x6f, 0xf5, 0xdc, 0xbb, 0x5b,
-	0x3d, 0xf7, 0xec, 0xd0, 0xa5, 0xe2, 0x2c, 0xee, 0x9a, 0x3d, 0xe6, 0x5b, 0x32, 0xde, 0x61, 0x80,
-	0xe2, 0x82, 0x45, 0x2f, 0xd2, 0x9d, 0x87, 0x8e, 0x8b, 0x91, 0x35, 0x18, 0xfd, 0x8b, 0xea, 0x16,
-	0x65, 0xef, 0x1f, 0x7d, 0x0e, 0x00, 0x00, 0xff, 0xff, 0xd3, 0x7e, 0xb6, 0xe2, 0x05, 0x0a, 0x00,
-	0x00,
+	// 743 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe4, 0x56, 0xcd, 0x6a, 0xdb, 0x58,
+	0x14, 0xb6, 0xfc, 0x93, 0x71, 0x4e, 0x42, 0x12, 0x34, 0x99, 0x44, 0x11, 0x83, 0x62, 0x14, 0x18,
+	0x3c, 0x03, 0x91, 0xc6, 0x19, 0x98, 0xc5, 0x30, 0x10, 0xe2, 0x99, 0x42, 0xa1, 0x18, 0x8a, 0xdc,
+	0x6c, 0x5a, 0x42, 0xb8, 0xb6, 0x4e, 0xd4, 0x4b, 0x25, 0x5d, 0xa1, 0x7b, 0xed, 0xc4, 0x9b, 0x3e,
+	0x43, 0x96, 0xa5, 0x8b, 0x3e, 0x40, 0x9f, 0xa0, 0x4f, 0x50, 0xb2, 0xcc, 0xb2, 0xab, 0xfe, 0x24,
+	0x2f, 0x52, 0x74, 0x2d, 0xa7, 0x8e, 0x2c, 0x37, 0x4e, 0xa0, 0x9b, 0x76, 0x77, 0x7f, 0xbe, 0xef,
+	0x9c, 0xe3, 0xef, 0xbb, 0xe7, 0xc8, 0xb0, 0x1e, 0xa3, 0x87, 0xa1, 0xed, 0xd2, 0x7e, 0x7f, 0x60,
+	0xf7, 0x1b, 0xb6, 0x38, 0xb1, 0xa2, 0x98, 0x09, 0xa6, 0x2e, 0xc9, 0x0b, 0x4b, 0x5e, 0x58, 0xfd,
+	0x86, 0x6e, 0x74, 0x19, 0x0f, 0x18, 0xb7, 0x3b, 0x84, 0xa3, 0xdd, 0x6f, 0x74, 0x50, 0x90, 0x86,
+	0xdd, 0x65, 0x34, 0x1c, 0xe2, 0xf5, 0x55, 0x8f, 0x79, 0x4c, 0x2e, 0xed, 0x64, 0x95, 0x9e, 0x1a,
+	0x1e, 0x63, 0x9e, 0x8f, 0xb6, 0xdc, 0x75, 0x7a, 0x47, 0xb6, 0xdb, 0x8b, 0x89, 0xa0, 0x6c, 0xc4,
+	0xda, 0xcc, 0xde, 0x0b, 0x1a, 0x20, 0x17, 0x24, 0x88, 0x52, 0x80, 0x9e, 0xad, 0x6f, 0x10, 0x21,
+	0x1f, 0xde, 0x99, 0x4b, 0xb0, 0xd8, 0xe2, 0xde, 0xbd, 0x20, 0x12, 0x03, 0x07, 0x79, 0x64, 0xbe,
+	0x2d, 0x82, 0xda, 0xe2, 0xde, 0x7f, 0x31, 0x12, 0x81, 0x7b, 0xbe, 0xcf, 0xba, 0x44, 0xb0, 0x58,
+	0x5d, 0x85, 0x0a, 0x71, 0x03, 0x1a, 0x6a, 0xc5, 0x9a, 0x52, 0x9f, 0x77, 0x86, 0x1b, 0xf5, 0x1f,
+	0xa8, 0x70, 0x41, 0x62, 0xa1, 0x95, 0x6a, 0x4a, 0x7d, 0x61, 0x47, 0xb7, 0x86, 0x95, 0x58, 0xa3,
+	0x4a, 0xac, 0x47, 0xa3, 0x4a, 0x9a, 0xd5, 0xb3, 0xf7, 0x9b, 0x85, 0xd3, 0x0f, 0x9b, 0x8a, 0x33,
+	0xa4, 0xa8, 0x7f, 0x43, 0x09, 0x43, 0x57, 0x2b, 0xdf, 0x82, 0x99, 0x10, 0xd4, 0x5d, 0xa8, 0xd2,
+	0x50, 0x60, 0xdc, 0x27, 0xbe, 0x56, 0x91, 0xe4, 0x8d, 0x09, 0xf2, 0xff, 0xa9, 0x40, 0x43, 0xee,
+	0x8b, 0x84, 0x7b, 0x45, 0x52, 0x55, 0x28, 0x87, 0x24, 0x40, 0x6d, 0x4e, 0xfe, 0x12, 0xb9, 0x56,
+	0x57, 0xa0, 0xd4, 0x8b, 0x7d, 0xed, 0x27, 0x79, 0x94, 0x2c, 0xd5, 0x5d, 0x80, 0x18, 0xbb, 0x34,
+	0xa2, 0x18, 0x0a, 0xae, 0x41, 0xad, 0x24, 0x13, 0x5d, 0xf7, 0xd3, 0x72, 0x46, 0x88, 0x66, 0x39,
+	0x49, 0xe4, 0x8c, 0x51, 0xcc, 0x3a, 0xac, 0x4d, 0xea, 0x98, 0x48, 0xac, 0x2e, 0x41, 0x91, 0xba,
+	0x9a, 0x52, 0x53, 0xea, 0x65, 0xa7, 0x48, 0x5d, 0xf3, 0x55, 0x11, 0x36, 0x5a, 0xdc, 0xdb, 0x8f,
+	0xdc, 0x71, 0x68, 0x1b, 0x85, 0xa0, 0xa1, 0x97, 0x45, 0xab, 0x6b, 0x30, 0xc7, 0x31, 0x74, 0x31,
+	0x4e, 0xad, 0x48, 0x77, 0xdf, 0xb1, 0x17, 0xe6, 0x73, 0xf8, 0xb9, 0xc5, 0xbd, 0x36, 0x8a, 0x54,
+	0x1c, 0xca, 0xc2, 0x16, 0x89, 0x66, 0x56, 0xe6, 0xba, 0x95, 0xa5, 0xdb, 0x5b, 0xf9, 0xaf, 0x6c,
+	0x09, 0x07, 0x03, 0xd6, 0x1f, 0x6b, 0x89, 0x19, 0xd3, 0x9b, 0x2f, 0x8b, 0xa0, 0x5f, 0xbd, 0x84,
+	0xb6, 0xcf, 0x8e, 0x1d, 0xf4, 0x91, 0x70, 0x6c, 0x8b, 0x18, 0x49, 0xf0, 0x0d, 0x3a, 0x6b, 0xdc,
+	0x95, 0xf2, 0x5d, 0x5c, 0xa9, 0xc1, 0x82, 0x8b, 0x5c, 0xd0, 0x50, 0x42, 0xa4, 0xb3, 0xf3, 0xce,
+	0xf8, 0x51, 0xf2, 0x5b, 0x23, 0xd2, 0xe3, 0xe8, 0x4a, 0xe7, 0xaa, 0x4e, 0xba, 0x53, 0xb7, 0x60,
+	0xf1, 0x88, 0x9e, 0xa0, 0x7b, 0x48, 0x02, 0xd6, 0x0b, 0x85, 0x06, 0x09, 0xf5, 0x7e, 0xc1, 0x59,
+	0x90, 0xa7, 0x7b, 0xf2, 0xb0, 0x09, 0x50, 0xe5, 0x22, 0x26, 0x02, 0xbd, 0x81, 0xf9, 0x27, 0x18,
+	0xd3, 0xb5, 0xc9, 0xed, 0x96, 0x27, 0xb2, 0x59, 0x1e, 0x26, 0xf9, 0x26, 0xc5, 0x9c, 0xf5, 0x49,
+	0x7c, 0xa9, 0xbf, 0x34, 0x5e, 0xbf, 0xf9, 0xba, 0x08, 0x5a, 0x32, 0x0e, 0x5d, 0x2a, 0xee, 0x1e,
+	0xfc, 0x07, 0xf1, 0x6e, 0xe7, 0x4d, 0x05, 0x4a, 0x2d, 0xee, 0xa9, 0x07, 0xb0, 0x9c, 0xfd, 0x5c,
+	0x98, 0xd9, 0xf6, 0x9a, 0x1c, 0x85, 0xfa, 0x6f, 0x37, 0x63, 0xe4, 0x03, 0x20, 0xb0, 0x36, 0x65,
+	0x34, 0xfe, 0x9e, 0x13, 0x21, 0x1f, 0xaa, 0xff, 0x9a, 0x03, 0xbd, 0xfa, 0xe8, 0xa9, 0xfb, 0xb0,
+	0x32, 0x31, 0x5d, 0xb6, 0x72, 0x18, 0x59, 0xd0, 0x0d, 0x61, 0x0f, 0x60, 0x39, 0x3b, 0x34, 0xf2,
+	0x84, 0xc9, 0x60, 0x66, 0x16, 0xa6, 0x07, 0xeb, 0xd3, 0x86, 0xca, 0x1f, 0x53, 0x43, 0x4c, 0x60,
+	0x75, 0x6b, 0x76, 0xec, 0xc8, 0x8f, 0x29, 0xdd, 0x97, 0xe7, 0x47, 0x3e, 0xf4, 0x06, 0xe1, 0x0e,
+	0xe1, 0x97, 0xfc, 0x16, 0xac, 0xe7, 0xd1, 0xf2, 0x90, 0x5f, 0x4f, 0xd0, 0x7c, 0x70, 0xf6, 0xc9,
+	0x28, 0x9c, 0x5d, 0x18, 0xca, 0xf9, 0x85, 0xa1, 0x7c, 0xbc, 0x30, 0x94, 0xd3, 0x4b, 0xa3, 0x70,
+	0x7e, 0x69, 0x14, 0xde, 0x5d, 0x1a, 0x85, 0xc7, 0xdb, 0x1e, 0x15, 0x4f, 0x7b, 0x1d, 0xab, 0xcb,
+	0x02, 0x5b, 0x46, 0xd9, 0x0e, 0x51, 0x1c, 0xb3, 0xf8, 0x59, 0xba, 0xf3, 0xd1, 0xf5, 0x30, 0xb6,
+	0x4f, 0x86, 0xff, 0xa8, 0x3a, 0x73, 0xb2, 0x33, 0xff, 0xfa, 0x1c, 0x00, 0x00, 0xff, 0xff, 0x72,
+	0xf8, 0x80, 0x10, 0x07, 0x0a, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -565,10 +618,10 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type MsgClient interface {
-	// Allocator is a distribution engine, which distributes everything which is
-	// comming in configurable interval periods to registered recipients. Each
-	// allocator has only one owner. Ideally this can be managed by a group
-	// module.
+	// Allocator is a distribution engine, which "divvys out" all incoming funds,
+	// at configurable time intervals to all registered recipients.
+	// Each allocator has only one owner.
+	// Ideally this can be managed by a group module.
 	CreateAllocator(ctx context.Context, in *MsgCreateAllocator, opts ...grpc.CallOption) (*MsgCreateAllocatorResp, error)
 	// Updates all allocator settings except admin and recipient map.
 	UpdateAllocatorSetting(ctx context.Context, in *MsgUpdateAllocatorSetting, opts ...grpc.CallOption) (*MsgEmptyResp, error)
@@ -581,7 +634,7 @@ type MsgClient interface {
 	// User creates a stream. Parameters:
 	// * % of total amount to be streamed to allocator every second.
 	// * destination address where the stream will go (ideally allocator)
-	CreateSlowReleaseStream(ctx context.Context, in *MsgCreateSlowReleaseStream, opts ...grpc.CallOption) (*MsgEmptyResp, error)
+	CreateSlowReleaseStream(ctx context.Context, in *MsgCreateSlowReleaseStream, opts ...grpc.CallOption) (*MsgCreateSlowReleaseStreamResp, error)
 	PauseSlowReleaseStream(ctx context.Context, in *MsgPauseSlowReleaseStream, opts ...grpc.CallOption) (*MsgEmptyResp, error)
 	EditSlowReleaseStream(ctx context.Context, in *MsgEditSlowReleaseStream, opts ...grpc.CallOption) (*MsgEmptyResp, error)
 }
@@ -596,7 +649,7 @@ func NewMsgClient(cc grpc1.ClientConn) MsgClient {
 
 func (c *msgClient) CreateAllocator(ctx context.Context, in *MsgCreateAllocator, opts ...grpc.CallOption) (*MsgCreateAllocatorResp, error) {
 	out := new(MsgCreateAllocatorResp)
-	err := c.cc.Invoke(ctx, "/regen.ecocredit.v1alpha2.Msg/CreateAllocator", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/regen.divvy.v1.Msg/CreateAllocator", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -605,7 +658,7 @@ func (c *msgClient) CreateAllocator(ctx context.Context, in *MsgCreateAllocator,
 
 func (c *msgClient) UpdateAllocatorSetting(ctx context.Context, in *MsgUpdateAllocatorSetting, opts ...grpc.CallOption) (*MsgEmptyResp, error) {
 	out := new(MsgEmptyResp)
-	err := c.cc.Invoke(ctx, "/regen.ecocredit.v1alpha2.Msg/UpdateAllocatorSetting", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/regen.divvy.v1.Msg/UpdateAllocatorSetting", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -614,7 +667,7 @@ func (c *msgClient) UpdateAllocatorSetting(ctx context.Context, in *MsgUpdateAll
 
 func (c *msgClient) SetAllocationMap(ctx context.Context, in *MsgSetAllocationMap, opts ...grpc.CallOption) (*MsgEmptyResp, error) {
 	out := new(MsgEmptyResp)
-	err := c.cc.Invoke(ctx, "/regen.ecocredit.v1alpha2.Msg/SetAllocationMap", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/regen.divvy.v1.Msg/SetAllocationMap", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -623,16 +676,16 @@ func (c *msgClient) SetAllocationMap(ctx context.Context, in *MsgSetAllocationMa
 
 func (c *msgClient) RemoveAllocator(ctx context.Context, in *MsgRemoveAllocator, opts ...grpc.CallOption) (*MsgCreateAllocatorResp, error) {
 	out := new(MsgCreateAllocatorResp)
-	err := c.cc.Invoke(ctx, "/regen.ecocredit.v1alpha2.Msg/RemoveAllocator", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/regen.divvy.v1.Msg/RemoveAllocator", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *msgClient) CreateSlowReleaseStream(ctx context.Context, in *MsgCreateSlowReleaseStream, opts ...grpc.CallOption) (*MsgEmptyResp, error) {
-	out := new(MsgEmptyResp)
-	err := c.cc.Invoke(ctx, "/regen.ecocredit.v1alpha2.Msg/CreateSlowReleaseStream", in, out, opts...)
+func (c *msgClient) CreateSlowReleaseStream(ctx context.Context, in *MsgCreateSlowReleaseStream, opts ...grpc.CallOption) (*MsgCreateSlowReleaseStreamResp, error) {
+	out := new(MsgCreateSlowReleaseStreamResp)
+	err := c.cc.Invoke(ctx, "/regen.divvy.v1.Msg/CreateSlowReleaseStream", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -641,7 +694,7 @@ func (c *msgClient) CreateSlowReleaseStream(ctx context.Context, in *MsgCreateSl
 
 func (c *msgClient) PauseSlowReleaseStream(ctx context.Context, in *MsgPauseSlowReleaseStream, opts ...grpc.CallOption) (*MsgEmptyResp, error) {
 	out := new(MsgEmptyResp)
-	err := c.cc.Invoke(ctx, "/regen.ecocredit.v1alpha2.Msg/PauseSlowReleaseStream", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/regen.divvy.v1.Msg/PauseSlowReleaseStream", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -650,7 +703,7 @@ func (c *msgClient) PauseSlowReleaseStream(ctx context.Context, in *MsgPauseSlow
 
 func (c *msgClient) EditSlowReleaseStream(ctx context.Context, in *MsgEditSlowReleaseStream, opts ...grpc.CallOption) (*MsgEmptyResp, error) {
 	out := new(MsgEmptyResp)
-	err := c.cc.Invoke(ctx, "/regen.ecocredit.v1alpha2.Msg/EditSlowReleaseStream", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/regen.divvy.v1.Msg/EditSlowReleaseStream", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -659,10 +712,10 @@ func (c *msgClient) EditSlowReleaseStream(ctx context.Context, in *MsgEditSlowRe
 
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
-	// Allocator is a distribution engine, which distributes everything which is
-	// comming in configurable interval periods to registered recipients. Each
-	// allocator has only one owner. Ideally this can be managed by a group
-	// module.
+	// Allocator is a distribution engine, which "divvys out" all incoming funds,
+	// at configurable time intervals to all registered recipients.
+	// Each allocator has only one owner.
+	// Ideally this can be managed by a group module.
 	CreateAllocator(context.Context, *MsgCreateAllocator) (*MsgCreateAllocatorResp, error)
 	// Updates all allocator settings except admin and recipient map.
 	UpdateAllocatorSetting(context.Context, *MsgUpdateAllocatorSetting) (*MsgEmptyResp, error)
@@ -675,7 +728,7 @@ type MsgServer interface {
 	// User creates a stream. Parameters:
 	// * % of total amount to be streamed to allocator every second.
 	// * destination address where the stream will go (ideally allocator)
-	CreateSlowReleaseStream(context.Context, *MsgCreateSlowReleaseStream) (*MsgEmptyResp, error)
+	CreateSlowReleaseStream(context.Context, *MsgCreateSlowReleaseStream) (*MsgCreateSlowReleaseStreamResp, error)
 	PauseSlowReleaseStream(context.Context, *MsgPauseSlowReleaseStream) (*MsgEmptyResp, error)
 	EditSlowReleaseStream(context.Context, *MsgEditSlowReleaseStream) (*MsgEmptyResp, error)
 }
@@ -696,7 +749,7 @@ func (*UnimplementedMsgServer) SetAllocationMap(ctx context.Context, req *MsgSet
 func (*UnimplementedMsgServer) RemoveAllocator(ctx context.Context, req *MsgRemoveAllocator) (*MsgCreateAllocatorResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RemoveAllocator not implemented")
 }
-func (*UnimplementedMsgServer) CreateSlowReleaseStream(ctx context.Context, req *MsgCreateSlowReleaseStream) (*MsgEmptyResp, error) {
+func (*UnimplementedMsgServer) CreateSlowReleaseStream(ctx context.Context, req *MsgCreateSlowReleaseStream) (*MsgCreateSlowReleaseStreamResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateSlowReleaseStream not implemented")
 }
 func (*UnimplementedMsgServer) PauseSlowReleaseStream(ctx context.Context, req *MsgPauseSlowReleaseStream) (*MsgEmptyResp, error) {
@@ -720,7 +773,7 @@ func _Msg_CreateAllocator_Handler(srv interface{}, ctx context.Context, dec func
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/regen.ecocredit.v1alpha2.Msg/CreateAllocator",
+		FullMethod: "/regen.divvy.v1.Msg/CreateAllocator",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).CreateAllocator(ctx, req.(*MsgCreateAllocator))
@@ -738,7 +791,7 @@ func _Msg_UpdateAllocatorSetting_Handler(srv interface{}, ctx context.Context, d
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/regen.ecocredit.v1alpha2.Msg/UpdateAllocatorSetting",
+		FullMethod: "/regen.divvy.v1.Msg/UpdateAllocatorSetting",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).UpdateAllocatorSetting(ctx, req.(*MsgUpdateAllocatorSetting))
@@ -756,7 +809,7 @@ func _Msg_SetAllocationMap_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/regen.ecocredit.v1alpha2.Msg/SetAllocationMap",
+		FullMethod: "/regen.divvy.v1.Msg/SetAllocationMap",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).SetAllocationMap(ctx, req.(*MsgSetAllocationMap))
@@ -774,7 +827,7 @@ func _Msg_RemoveAllocator_Handler(srv interface{}, ctx context.Context, dec func
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/regen.ecocredit.v1alpha2.Msg/RemoveAllocator",
+		FullMethod: "/regen.divvy.v1.Msg/RemoveAllocator",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).RemoveAllocator(ctx, req.(*MsgRemoveAllocator))
@@ -792,7 +845,7 @@ func _Msg_CreateSlowReleaseStream_Handler(srv interface{}, ctx context.Context, 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/regen.ecocredit.v1alpha2.Msg/CreateSlowReleaseStream",
+		FullMethod: "/regen.divvy.v1.Msg/CreateSlowReleaseStream",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).CreateSlowReleaseStream(ctx, req.(*MsgCreateSlowReleaseStream))
@@ -810,7 +863,7 @@ func _Msg_PauseSlowReleaseStream_Handler(srv interface{}, ctx context.Context, d
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/regen.ecocredit.v1alpha2.Msg/PauseSlowReleaseStream",
+		FullMethod: "/regen.divvy.v1.Msg/PauseSlowReleaseStream",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).PauseSlowReleaseStream(ctx, req.(*MsgPauseSlowReleaseStream))
@@ -828,7 +881,7 @@ func _Msg_EditSlowReleaseStream_Handler(srv interface{}, ctx context.Context, de
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/regen.ecocredit.v1alpha2.Msg/EditSlowReleaseStream",
+		FullMethod: "/regen.divvy.v1.Msg/EditSlowReleaseStream",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).EditSlowReleaseStream(ctx, req.(*MsgEditSlowReleaseStream))
@@ -837,7 +890,7 @@ func _Msg_EditSlowReleaseStream_Handler(srv interface{}, ctx context.Context, de
 }
 
 var _Msg_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "regen.ecocredit.v1alpha2.Msg",
+	ServiceName: "regen.divvy.v1.Msg",
 	HandlerType: (*MsgServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -935,14 +988,14 @@ func (m *MsgCreateAllocator) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		copy(dAtA[i:], m.Url)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.Url)))
 		i--
-		dAtA[i] = 0x32
+		dAtA[i] = 0x3a
 	}
 	if len(m.Name) > 0 {
 		i -= len(m.Name)
 		copy(dAtA[i:], m.Name)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.Name)))
 		i--
-		dAtA[i] = 0x2a
+		dAtA[i] = 0x32
 	}
 	n1, err1 := github_com_gogo_protobuf_types.StdDurationMarshalTo(m.Interval, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdDuration(m.Interval):])
 	if err1 != nil {
@@ -951,7 +1004,7 @@ func (m *MsgCreateAllocator) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i -= n1
 	i = encodeVarintTx(dAtA, i, uint64(n1))
 	i--
-	dAtA[i] = 0x22
+	dAtA[i] = 0x2a
 	n2, err2 := github_com_gogo_protobuf_types.StdTimeMarshalTo(m.End, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdTime(m.End):])
 	if err2 != nil {
 		return 0, err2
@@ -959,7 +1012,7 @@ func (m *MsgCreateAllocator) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i -= n2
 	i = encodeVarintTx(dAtA, i, uint64(n2))
 	i--
-	dAtA[i] = 0x1a
+	dAtA[i] = 0x22
 	n3, err3 := github_com_gogo_protobuf_types.StdTimeMarshalTo(m.Start, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdTime(m.Start):])
 	if err3 != nil {
 		return 0, err3
@@ -967,13 +1020,13 @@ func (m *MsgCreateAllocator) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i -= n3
 	i = encodeVarintTx(dAtA, i, uint64(n3))
 	i--
-	dAtA[i] = 0x12
+	dAtA[i] = 0x1a
 	if len(m.Admin) > 0 {
 		i -= len(m.Admin)
 		copy(dAtA[i:], m.Admin)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.Admin)))
 		i--
-		dAtA[i] = 0xa
+		dAtA[i] = 0x12
 	}
 	return len(dAtA) - i, nil
 }
@@ -998,12 +1051,10 @@ func (m *MsgCreateAllocatorResp) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 	_ = i
 	var l int
 	_ = l
-	if len(m.Id) > 0 {
-		i -= len(m.Id)
-		copy(dAtA[i:], m.Id)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Id)))
+	if m.Id != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.Id))
 		i--
-		dAtA[i] = 0xa
+		dAtA[i] = 0x8
 	}
 	return len(dAtA) - i, nil
 }
@@ -1033,14 +1084,14 @@ func (m *MsgUpdateAllocatorSetting) MarshalToSizedBuffer(dAtA []byte) (int, erro
 		copy(dAtA[i:], m.Url)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.Url)))
 		i--
-		dAtA[i] = 0x32
+		dAtA[i] = 0x3a
 	}
 	if len(m.Name) > 0 {
 		i -= len(m.Name)
 		copy(dAtA[i:], m.Name)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.Name)))
 		i--
-		dAtA[i] = 0x2a
+		dAtA[i] = 0x32
 	}
 	n4, err4 := github_com_gogo_protobuf_types.StdDurationMarshalTo(m.Interval, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdDuration(m.Interval):])
 	if err4 != nil {
@@ -1049,7 +1100,7 @@ func (m *MsgUpdateAllocatorSetting) MarshalToSizedBuffer(dAtA []byte) (int, erro
 	i -= n4
 	i = encodeVarintTx(dAtA, i, uint64(n4))
 	i--
-	dAtA[i] = 0x22
+	dAtA[i] = 0x2a
 	n5, err5 := github_com_gogo_protobuf_types.StdTimeMarshalTo(m.End, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdTime(m.End):])
 	if err5 != nil {
 		return 0, err5
@@ -1057,7 +1108,7 @@ func (m *MsgUpdateAllocatorSetting) MarshalToSizedBuffer(dAtA []byte) (int, erro
 	i -= n5
 	i = encodeVarintTx(dAtA, i, uint64(n5))
 	i--
-	dAtA[i] = 0x1a
+	dAtA[i] = 0x22
 	n6, err6 := github_com_gogo_protobuf_types.StdTimeMarshalTo(m.Start, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdTime(m.Start):])
 	if err6 != nil {
 		return 0, err6
@@ -1065,13 +1116,18 @@ func (m *MsgUpdateAllocatorSetting) MarshalToSizedBuffer(dAtA []byte) (int, erro
 	i -= n6
 	i = encodeVarintTx(dAtA, i, uint64(n6))
 	i--
-	dAtA[i] = 0x12
+	dAtA[i] = 0x1a
 	if len(m.Sender) > 0 {
 		i -= len(m.Sender)
 		copy(dAtA[i:], m.Sender)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
 		i--
-		dAtA[i] = 0xa
+		dAtA[i] = 0x12
+	}
+	if m.Id != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x8
 	}
 	return len(dAtA) - i, nil
 }
@@ -1107,7 +1163,7 @@ func (m *MsgSetAllocationMap) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				i = encodeVarintTx(dAtA, i, uint64(size))
 			}
 			i--
-			dAtA[i] = 0x12
+			dAtA[i] = 0x1a
 		}
 	}
 	if len(m.Sender) > 0 {
@@ -1115,7 +1171,12 @@ func (m *MsgSetAllocationMap) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		copy(dAtA[i:], m.Sender)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
 		i--
-		dAtA[i] = 0xa
+		dAtA[i] = 0x12
+	}
+	if m.Id != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x8
 	}
 	return len(dAtA) - i, nil
 }
@@ -1145,7 +1206,12 @@ func (m *MsgRemoveAllocator) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		copy(dAtA[i:], m.Sender)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
 		i--
-		dAtA[i] = 0xa
+		dAtA[i] = 0x12
+	}
+	if m.Id != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x8
 	}
 	return len(dAtA) - i, nil
 }
@@ -1187,14 +1253,14 @@ func (m *MsgCreateSlowReleaseStream) MarshalToSizedBuffer(dAtA []byte) (int, err
 			dAtA[i] = 0
 		}
 		i--
-		dAtA[i] = 0x28
+		dAtA[i] = 0x30
 	}
 	if len(m.Destination) > 0 {
 		i -= len(m.Destination)
 		copy(dAtA[i:], m.Destination)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.Destination)))
 		i--
-		dAtA[i] = 0x22
+		dAtA[i] = 0x2a
 	}
 	n7, err7 := github_com_gogo_protobuf_types.StdDurationMarshalTo(m.Interval, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdDuration(m.Interval):])
 	if err7 != nil {
@@ -1203,7 +1269,7 @@ func (m *MsgCreateSlowReleaseStream) MarshalToSizedBuffer(dAtA []byte) (int, err
 	i -= n7
 	i = encodeVarintTx(dAtA, i, uint64(n7))
 	i--
-	dAtA[i] = 0x1a
+	dAtA[i] = 0x22
 	n8, err8 := github_com_gogo_protobuf_types.StdTimeMarshalTo(m.Start, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdTime(m.Start):])
 	if err8 != nil {
 		return 0, err8
@@ -1211,13 +1277,13 @@ func (m *MsgCreateSlowReleaseStream) MarshalToSizedBuffer(dAtA []byte) (int, err
 	i -= n8
 	i = encodeVarintTx(dAtA, i, uint64(n8))
 	i--
-	dAtA[i] = 0x12
+	dAtA[i] = 0x1a
 	if len(m.Admin) > 0 {
 		i -= len(m.Admin)
 		copy(dAtA[i:], m.Admin)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.Admin)))
 		i--
-		dAtA[i] = 0xa
+		dAtA[i] = 0x12
 	}
 	return len(dAtA) - i, nil
 }
@@ -1236,6 +1302,34 @@ func (m *MsgCreateSlowReleaseStream_FixedAmount) MarshalToSizedBuffer(dAtA []byt
 	dAtA[i] = 0x52
 	return len(dAtA) - i, nil
 }
+func (m *MsgCreateSlowReleaseStreamResp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgCreateSlowReleaseStreamResp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgCreateSlowReleaseStreamResp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Id != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *MsgPauseSlowReleaseStream) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1264,14 +1358,19 @@ func (m *MsgPauseSlowReleaseStream) MarshalToSizedBuffer(dAtA []byte) (int, erro
 			dAtA[i] = 0
 		}
 		i--
-		dAtA[i] = 0x10
+		dAtA[i] = 0x18
 	}
 	if len(m.Sender) > 0 {
 		i -= len(m.Sender)
 		copy(dAtA[i:], m.Sender)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
 		i--
-		dAtA[i] = 0xa
+		dAtA[i] = 0x12
+	}
+	if m.Id != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x8
 	}
 	return len(dAtA) - i, nil
 }
@@ -1305,12 +1404,22 @@ func (m *MsgEditSlowReleaseStream) MarshalToSizedBuffer(dAtA []byte) (int, error
 			}
 		}
 	}
+	if m.Paused {
+		i--
+		if m.Paused {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x30
+	}
 	if len(m.Destination) > 0 {
 		i -= len(m.Destination)
 		copy(dAtA[i:], m.Destination)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.Destination)))
 		i--
-		dAtA[i] = 0x22
+		dAtA[i] = 0x2a
 	}
 	n9, err9 := github_com_gogo_protobuf_types.StdDurationMarshalTo(m.Interval, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdDuration(m.Interval):])
 	if err9 != nil {
@@ -1319,7 +1428,7 @@ func (m *MsgEditSlowReleaseStream) MarshalToSizedBuffer(dAtA []byte) (int, error
 	i -= n9
 	i = encodeVarintTx(dAtA, i, uint64(n9))
 	i--
-	dAtA[i] = 0x1a
+	dAtA[i] = 0x22
 	n10, err10 := github_com_gogo_protobuf_types.StdTimeMarshalTo(m.Start, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdTime(m.Start):])
 	if err10 != nil {
 		return 0, err10
@@ -1327,13 +1436,18 @@ func (m *MsgEditSlowReleaseStream) MarshalToSizedBuffer(dAtA []byte) (int, error
 	i -= n10
 	i = encodeVarintTx(dAtA, i, uint64(n10))
 	i--
-	dAtA[i] = 0x12
+	dAtA[i] = 0x1a
 	if len(m.Sender) > 0 {
 		i -= len(m.Sender)
 		copy(dAtA[i:], m.Sender)
 		i = encodeVarintTx(dAtA, i, uint64(len(m.Sender)))
 		i--
-		dAtA[i] = 0xa
+		dAtA[i] = 0x12
+	}
+	if m.Id != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.Id))
+		i--
+		dAtA[i] = 0x8
 	}
 	return len(dAtA) - i, nil
 }
@@ -1411,9 +1525,8 @@ func (m *MsgCreateAllocatorResp) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = len(m.Id)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
+	if m.Id != 0 {
+		n += 1 + sovTx(uint64(m.Id))
 	}
 	return n
 }
@@ -1424,6 +1537,9 @@ func (m *MsgUpdateAllocatorSetting) Size() (n int) {
 	}
 	var l int
 	_ = l
+	if m.Id != 0 {
+		n += 1 + sovTx(uint64(m.Id))
+	}
 	l = len(m.Sender)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
@@ -1451,6 +1567,9 @@ func (m *MsgSetAllocationMap) Size() (n int) {
 	}
 	var l int
 	_ = l
+	if m.Id != 0 {
+		n += 1 + sovTx(uint64(m.Id))
+	}
 	l = len(m.Sender)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
@@ -1470,6 +1589,9 @@ func (m *MsgRemoveAllocator) Size() (n int) {
 	}
 	var l int
 	_ = l
+	if m.Id != 0 {
+		n += 1 + sovTx(uint64(m.Id))
+	}
 	l = len(m.Sender)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
@@ -1514,12 +1636,27 @@ func (m *MsgCreateSlowReleaseStream_FixedAmount) Size() (n int) {
 	n += 1 + l + sovTx(uint64(l))
 	return n
 }
+func (m *MsgCreateSlowReleaseStreamResp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Id != 0 {
+		n += 1 + sovTx(uint64(m.Id))
+	}
+	return n
+}
+
 func (m *MsgPauseSlowReleaseStream) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
+	if m.Id != 0 {
+		n += 1 + sovTx(uint64(m.Id))
+	}
 	l = len(m.Sender)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
@@ -1536,6 +1673,9 @@ func (m *MsgEditSlowReleaseStream) Size() (n int) {
 	}
 	var l int
 	_ = l
+	if m.Id != 0 {
+		n += 1 + sovTx(uint64(m.Id))
+	}
 	l = len(m.Sender)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
@@ -1547,6 +1687,9 @@ func (m *MsgEditSlowReleaseStream) Size() (n int) {
 	l = len(m.Destination)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.Paused {
+		n += 2
 	}
 	if m.Strategy != nil {
 		n += m.Strategy.Size()
@@ -1653,7 +1796,7 @@ func (m *MsgCreateAllocator) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: MsgCreateAllocator: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Admin", wireType)
 			}
@@ -1685,7 +1828,7 @@ func (m *MsgCreateAllocator) Unmarshal(dAtA []byte) error {
 			}
 			m.Admin = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 2:
+		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Start", wireType)
 			}
@@ -1718,7 +1861,7 @@ func (m *MsgCreateAllocator) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 3:
+		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field End", wireType)
 			}
@@ -1751,7 +1894,7 @@ func (m *MsgCreateAllocator) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 4:
+		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Interval", wireType)
 			}
@@ -1784,7 +1927,7 @@ func (m *MsgCreateAllocator) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 5:
+		case 6:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
 			}
@@ -1816,7 +1959,7 @@ func (m *MsgCreateAllocator) Unmarshal(dAtA []byte) error {
 			}
 			m.Name = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 6:
+		case 7:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Url", wireType)
 			}
@@ -1936,10 +2079,10 @@ func (m *MsgCreateAllocatorResp) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
-			if wireType != 2 {
+			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
 			}
-			var stringLen uint64
+			m.Id = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTx
@@ -1949,24 +2092,11 @@ func (m *MsgCreateAllocatorResp) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				m.Id |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Id = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTx(dAtA[iNdEx:])
@@ -2021,6 +2151,25 @@ func (m *MsgUpdateAllocatorSetting) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
 			}
@@ -2052,7 +2201,7 @@ func (m *MsgUpdateAllocatorSetting) Unmarshal(dAtA []byte) error {
 			}
 			m.Sender = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 2:
+		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Start", wireType)
 			}
@@ -2085,7 +2234,7 @@ func (m *MsgUpdateAllocatorSetting) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 3:
+		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field End", wireType)
 			}
@@ -2118,7 +2267,7 @@ func (m *MsgUpdateAllocatorSetting) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 4:
+		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Interval", wireType)
 			}
@@ -2151,7 +2300,7 @@ func (m *MsgUpdateAllocatorSetting) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 5:
+		case 6:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
 			}
@@ -2183,7 +2332,7 @@ func (m *MsgUpdateAllocatorSetting) Unmarshal(dAtA []byte) error {
 			}
 			m.Name = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 6:
+		case 7:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Url", wireType)
 			}
@@ -2269,6 +2418,25 @@ func (m *MsgSetAllocationMap) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
 			}
@@ -2300,7 +2468,7 @@ func (m *MsgSetAllocationMap) Unmarshal(dAtA []byte) error {
 			}
 			m.Sender = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 2:
+		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Recipients", wireType)
 			}
@@ -2388,6 +2556,25 @@ func (m *MsgRemoveAllocator) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
 			}
@@ -2472,7 +2659,7 @@ func (m *MsgCreateSlowReleaseStream) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: MsgCreateSlowReleaseStream: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Admin", wireType)
 			}
@@ -2504,7 +2691,7 @@ func (m *MsgCreateSlowReleaseStream) Unmarshal(dAtA []byte) error {
 			}
 			m.Admin = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 2:
+		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Start", wireType)
 			}
@@ -2537,7 +2724,7 @@ func (m *MsgCreateSlowReleaseStream) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 3:
+		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Interval", wireType)
 			}
@@ -2570,7 +2757,7 @@ func (m *MsgCreateSlowReleaseStream) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 4:
+		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Destination", wireType)
 			}
@@ -2602,7 +2789,7 @@ func (m *MsgCreateSlowReleaseStream) Unmarshal(dAtA []byte) error {
 			}
 			m.Destination = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 5:
+		case 6:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Paused", wireType)
 			}
@@ -2678,6 +2865,78 @@ func (m *MsgCreateSlowReleaseStream) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *MsgCreateSlowReleaseStreamResp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgCreateSlowReleaseStreamResp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgCreateSlowReleaseStreamResp: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *MsgPauseSlowReleaseStream) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -2708,6 +2967,25 @@ func (m *MsgPauseSlowReleaseStream) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
 			}
@@ -2739,7 +3017,7 @@ func (m *MsgPauseSlowReleaseStream) Unmarshal(dAtA []byte) error {
 			}
 			m.Sender = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 2:
+		case 3:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Paused", wireType)
 			}
@@ -2813,6 +3091,25 @@ func (m *MsgEditSlowReleaseStream) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			m.Id = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Id |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
 			}
@@ -2844,7 +3141,7 @@ func (m *MsgEditSlowReleaseStream) Unmarshal(dAtA []byte) error {
 			}
 			m.Sender = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 2:
+		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Start", wireType)
 			}
@@ -2877,7 +3174,7 @@ func (m *MsgEditSlowReleaseStream) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 3:
+		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Interval", wireType)
 			}
@@ -2910,7 +3207,7 @@ func (m *MsgEditSlowReleaseStream) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 4:
+		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Destination", wireType)
 			}
@@ -2942,6 +3239,26 @@ func (m *MsgEditSlowReleaseStream) Unmarshal(dAtA []byte) error {
 			}
 			m.Destination = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Paused", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Paused = bool(v != 0)
 		case 10:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field FixedAmount", wireType)

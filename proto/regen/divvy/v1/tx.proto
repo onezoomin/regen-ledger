@@ -38,7 +38,7 @@ service Msg {
   // * % of total amount to be streamed to allocator every second.
   // * destination address where the stream will go (ideally allocator)
   rpc CreateSlowReleaseStream(MsgCreateSlowReleaseStream)
-      returns (MsgEmptyResp);
+      returns (MsgCreateSlowReleaseStreamResp);
 
   rpc PauseSlowReleaseStream(MsgPauseSlowReleaseStream) returns (MsgEmptyResp);
 
@@ -57,20 +57,20 @@ message MsgEmptyResp {}
 message MsgCreateAllocator {
   // admin is the address of the account that creates the allocator and signs
   // the message
-  string admin = 1;
+  string admin = 2;
 
-  google.protobuf.Timestamp start = 2
+  google.protobuf.Timestamp start = 3
       [ (gogoproto.nullable) = false, (gogoproto.stdtime) = true ];
-  google.protobuf.Timestamp end = 3
+  google.protobuf.Timestamp end = 4
       [ (gogoproto.nullable) = false, (gogoproto.stdtime) = true ];
   // how often we do a distribution
-  google.protobuf.Duration interval = 4
+  google.protobuf.Duration interval = 5
       [ (gogoproto.nullable) = false, (gogoproto.stdduration) = true ];
 
   // name of the allocator
-  string name = 5;
+  string name = 6;
   // url with metadata
-  string url = 6;
+  string url = 7;
 
   // Initial allocator mapping.
   // Invariants:
@@ -78,57 +78,66 @@ message MsgCreateAllocator {
   repeated Recipient recipients = 10 [ (gogoproto.nullable) = false ];
 }
 
-// MsgCreateClassResponse is the Msg/CreateClass response type.
+// MsgCreateClassResponse is the Msg/CreateAllocator response type.
 message MsgCreateAllocatorResp {
   // id is the unique ID of the newly created allocator.
-  string id = 1;
+  uint64 id = 1;
 }
 
 message MsgUpdateAllocatorSetting {
+  // id of the allocator
+  uint64 id = 1;
+
   // sender must the the Allocator admin
-  string sender = 1;
-  google.protobuf.Timestamp start = 2
+  string sender = 2;
+
+  google.protobuf.Timestamp start = 3
       [ (gogoproto.nullable) = false, (gogoproto.stdtime) = true ];
-  google.protobuf.Timestamp end = 3
+  google.protobuf.Timestamp end = 4
       [ (gogoproto.nullable) = false, (gogoproto.stdtime) = true ];
-  // how often we do a distribution, min 1s
-  google.protobuf.Duration interval = 4
+  // how often we do a distribution
+  google.protobuf.Duration interval = 5
       [ (gogoproto.nullable) = false, (gogoproto.stdduration) = true ];
 
   // name of the allocator
-  string name = 5;
+  string name = 6;
   // url with metadata
-  string url = 6;
+  string url = 7;
 }
 
 message MsgSetAllocationMap {
+  // id of the allocator
+  uint64 id = 1;
+
   // sender must the the Allocator admin
-  string sender = 1;
+  string sender = 2;
   // New allocator mapping.
   // Invariants:
   // * sum of shares in recipients must equal to 100% (1mln)
-  repeated Recipient recipients = 2 [ (gogoproto.nullable) = false ];
+  repeated Recipient recipients = 3 [ (gogoproto.nullable) = false ];
 }
 
 message MsgRemoveAllocator {
+  // id of the allocator
+  uint64 id = 1;
   // sender must the the Allocator admin
-  string sender = 1;
+  string sender = 2;
 }
 
 message MsgCreateSlowReleaseStream {
   // signer and creator of the stream
-  string admin = 1;
+  string admin = 2;
 
   // when the stream starts
-  google.protobuf.Timestamp start = 2
+  google.protobuf.Timestamp start = 3
       [ (gogoproto.nullable) = false, (gogoproto.stdtime) = true ];
   // how often we do a distribution
-  google.protobuf.Duration interval = 3
+  google.protobuf.Duration interval = 4
       [ (gogoproto.nullable) = false, (gogoproto.stdduration) = true ];
   // Allocator address
-  string destination = 4;
+  string destination = 5;
   // when paused, stream won't send funds
-  bool paused = 5;
+  bool paused = 6;
 
   oneof strategy {
     // fixed amount of tokens streamed in each round. If there is a zero balance
@@ -138,25 +147,39 @@ message MsgCreateSlowReleaseStream {
   }
 }
 
+// MsgCreateSlowReleaseStreamResp is response for
+// Msg/CreateSlowReleaseStreamResp
+message MsgCreateSlowReleaseStreamResp {
+  // id is the unique ID of the newly created stream.
+  uint64 id = 1;
+}
+
 message MsgPauseSlowReleaseStream {
+  // id of the stream
+  uint64 id = 1;
+
   // sender must the the Stream admin
-  string sender = 1;
+  string sender = 2;
   // the pause value to set
-  bool paused = 2;
+  bool paused = 3;
 }
 
 message MsgEditSlowReleaseStream {
-  // sender must the the Stream admin
-  string sender = 1;
+  // id of the stream
+  uint64 id = 1;
 
+  // sender must the the Stream admin
+  string sender = 2;
   // when the stream starts
-  google.protobuf.Timestamp start = 2
+  google.protobuf.Timestamp start = 3
       [ (gogoproto.nullable) = false, (gogoproto.stdtime) = true ];
   // how often we do a distribution
-  google.protobuf.Duration interval = 3
+  google.protobuf.Duration interval = 4
       [ (gogoproto.nullable) = false, (gogoproto.stdduration) = true ];
   // Allocator address
-  string destination = 4;
+  string destination = 5;
+  // when paused, stream won't send funds
+  bool paused = 6;
 
   oneof strategy {
     // fixed amount of tokens streamed in each round. If there is a zero balance

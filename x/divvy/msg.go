@@ -6,6 +6,7 @@ import (
 
 	// sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/regen-network/regen-ledger/types"
 )
 
 var _ sdk.Msg = &MsgCreateAllocator{}
@@ -35,7 +36,7 @@ func (msg MsgCreateAllocator) ValidateBasic() error {
 }
 
 // Validate makes all additional validation (not present in ValidateBasic)
-func (msg MsgCreateAllocator) Validate(ctx sdk.Context) error {
+func (msg MsgCreateAllocator) Validate(ctx types.Context) error {
 	t := ctx.BlockTime()
 	if msg.End.Before(t) {
 		return fmt.Errorf("`end` must be after current block time (%v)", t)

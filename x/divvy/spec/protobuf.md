@@ -5,25 +5,26 @@
 ## Table of Contents
 
 - [regen/divvy/v1/types.proto](#regen/divvy/v1/types.proto)
-    - [Allocator](#regen.ecocredit.v1alpha2.Allocator)
-    - [Recipient](#regen.ecocredit.v1alpha2.Recipient)
-    - [SlowReleaseStream](#regen.ecocredit.v1alpha2.SlowReleaseStream)
+    - [Allocator](#regen.divvy.v1.Allocator)
+    - [Recipient](#regen.divvy.v1.Recipient)
+    - [SlowReleaseStream](#regen.divvy.v1.SlowReleaseStream)
   
 - [regen/divvy/v1/query.proto](#regen/divvy/v1/query.proto)
-    - [Query](#regen.ecocredit.v1alpha2.Query)
+    - [Query](#regen.divvy.v1.Query)
   
 - [regen/divvy/v1/tx.proto](#regen/divvy/v1/tx.proto)
-    - [MsgCreateAllocator](#regen.ecocredit.v1alpha2.MsgCreateAllocator)
-    - [MsgCreateAllocatorResp](#regen.ecocredit.v1alpha2.MsgCreateAllocatorResp)
-    - [MsgCreateSlowReleaseStream](#regen.ecocredit.v1alpha2.MsgCreateSlowReleaseStream)
-    - [MsgEditSlowReleaseStream](#regen.ecocredit.v1alpha2.MsgEditSlowReleaseStream)
-    - [MsgEmptyResp](#regen.ecocredit.v1alpha2.MsgEmptyResp)
-    - [MsgPauseSlowReleaseStream](#regen.ecocredit.v1alpha2.MsgPauseSlowReleaseStream)
-    - [MsgRemoveAllocator](#regen.ecocredit.v1alpha2.MsgRemoveAllocator)
-    - [MsgSetAllocationMap](#regen.ecocredit.v1alpha2.MsgSetAllocationMap)
-    - [MsgUpdateAllocatorSetting](#regen.ecocredit.v1alpha2.MsgUpdateAllocatorSetting)
+    - [MsgCreateAllocator](#regen.divvy.v1.MsgCreateAllocator)
+    - [MsgCreateAllocatorResp](#regen.divvy.v1.MsgCreateAllocatorResp)
+    - [MsgCreateSlowReleaseStream](#regen.divvy.v1.MsgCreateSlowReleaseStream)
+    - [MsgCreateSlowReleaseStreamResp](#regen.divvy.v1.MsgCreateSlowReleaseStreamResp)
+    - [MsgEditSlowReleaseStream](#regen.divvy.v1.MsgEditSlowReleaseStream)
+    - [MsgEmptyResp](#regen.divvy.v1.MsgEmptyResp)
+    - [MsgPauseSlowReleaseStream](#regen.divvy.v1.MsgPauseSlowReleaseStream)
+    - [MsgRemoveAllocator](#regen.divvy.v1.MsgRemoveAllocator)
+    - [MsgSetAllocationMap](#regen.divvy.v1.MsgSetAllocationMap)
+    - [MsgUpdateAllocatorSetting](#regen.divvy.v1.MsgUpdateAllocatorSetting)
   
-    - [Msg](#regen.ecocredit.v1alpha2.Msg)
+    - [Msg](#regen.divvy.v1.Msg)
   
 - [Scalar Value Types](#scalar-value-types)
 
@@ -36,7 +37,7 @@
 
 
 
-<a name="regen.ecocredit.v1alpha2.Allocator"></a>
+<a name="regen.divvy.v1.Allocator"></a>
 
 ### Allocator
 
@@ -51,14 +52,14 @@
 | name | [string](#string) |  | name of the allocator |
 | url | [string](#string) |  | url with metadata |
 | paused | [bool](#bool) |  |  |
-| entries | [Recipient](#regen.ecocredit.v1alpha2.Recipient) | repeated | Invariant: * sum of shares in entires must equal to 100% (1mln) list of allocation entries |
+| entries | [Recipient](#regen.divvy.v1.Recipient) | repeated | Invariant: * sum of shares in entires must equal to 100% (1mln) list of allocation entries |
 
 
 
 
 
 
-<a name="regen.ecocredit.v1alpha2.Recipient"></a>
+<a name="regen.divvy.v1.Recipient"></a>
 
 ### Recipient
 
@@ -74,7 +75,7 @@
 
 
 
-<a name="regen.ecocredit.v1alpha2.SlowReleaseStream"></a>
+<a name="regen.divvy.v1.SlowReleaseStream"></a>
 
 ### SlowReleaseStream
 
@@ -117,10 +118,10 @@
  <!-- end HasExtensions -->
 
 
-<a name="regen.ecocredit.v1alpha2.Query"></a>
+<a name="regen.divvy.v1.Query"></a>
 
 ### Query
-Msg is the regen.ecocredit.v1alpha1 Msg service.
+Msg is the divvy Msg service.
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
@@ -136,7 +137,7 @@ Msg is the regen.ecocredit.v1alpha1 Msg service.
 
 
 
-<a name="regen.ecocredit.v1alpha2.MsgCreateAllocator"></a>
+<a name="regen.divvy.v1.MsgCreateAllocator"></a>
 
 ### MsgCreateAllocator
 MsgCreateClass is the Msg/CreateClass request type.
@@ -150,29 +151,29 @@ MsgCreateClass is the Msg/CreateClass request type.
 | interval | [google.protobuf.Duration](#google.protobuf.Duration) |  | how often we do a distribution |
 | name | [string](#string) |  | name of the allocator |
 | url | [string](#string) |  | url with metadata |
-| recipients | [Recipient](#regen.ecocredit.v1alpha2.Recipient) | repeated | Initial allocator mapping. Invariants: * sum of shares in recipients must equal to 100% (1mln) |
+| recipients | [Recipient](#regen.divvy.v1.Recipient) | repeated | Initial allocator mapping. Invariants: * sum of shares in recipients must equal to 100% (1mln) |
 
 
 
 
 
 
-<a name="regen.ecocredit.v1alpha2.MsgCreateAllocatorResp"></a>
+<a name="regen.divvy.v1.MsgCreateAllocatorResp"></a>
 
 ### MsgCreateAllocatorResp
-MsgCreateClassResponse is the Msg/CreateClass response type.
+MsgCreateClassResponse is the Msg/CreateAllocator response type.
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| id | [string](#string) |  | id is the unique ID of the newly created allocator. |
+| id | [uint64](#uint64) |  | id is the unique ID of the newly created allocator. |
 
 
 
 
 
 
-<a name="regen.ecocredit.v1alpha2.MsgCreateSlowReleaseStream"></a>
+<a name="regen.divvy.v1.MsgCreateSlowReleaseStream"></a>
 
 ### MsgCreateSlowReleaseStream
 
@@ -192,7 +193,23 @@ MsgCreateClassResponse is the Msg/CreateClass response type.
 
 
 
-<a name="regen.ecocredit.v1alpha2.MsgEditSlowReleaseStream"></a>
+<a name="regen.divvy.v1.MsgCreateSlowReleaseStreamResp"></a>
+
+### MsgCreateSlowReleaseStreamResp
+MsgCreateSlowReleaseStreamResp is response for
+Msg/CreateSlowReleaseStreamResp
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [uint64](#uint64) |  | id is the unique ID of the newly created stream. |
+
+
+
+
+
+
+<a name="regen.divvy.v1.MsgEditSlowReleaseStream"></a>
 
 ### MsgEditSlowReleaseStream
 
@@ -200,10 +217,12 @@ MsgCreateClassResponse is the Msg/CreateClass response type.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| id | [uint64](#uint64) |  | id of the stream |
 | sender | [string](#string) |  | sender must the the Stream admin |
 | start | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  | when the stream starts |
 | interval | [google.protobuf.Duration](#google.protobuf.Duration) |  | how often we do a distribution |
 | destination | [string](#string) |  | Allocator address |
+| paused | [bool](#bool) |  | when paused, stream won't send funds |
 | fixed_amount | [string](#string) |  | fixed amount of tokens streamed in each round. If there is a zero balance available then then nothing will be streamed. If only fraction is available then the it will be fully streamed. |
 
 
@@ -211,7 +230,7 @@ MsgCreateClassResponse is the Msg/CreateClass response type.
 
 
 
-<a name="regen.ecocredit.v1alpha2.MsgEmptyResp"></a>
+<a name="regen.divvy.v1.MsgEmptyResp"></a>
 
 ### MsgEmptyResp
 
@@ -221,7 +240,7 @@ MsgCreateClassResponse is the Msg/CreateClass response type.
 
 
 
-<a name="regen.ecocredit.v1alpha2.MsgPauseSlowReleaseStream"></a>
+<a name="regen.divvy.v1.MsgPauseSlowReleaseStream"></a>
 
 ### MsgPauseSlowReleaseStream
 
@@ -229,6 +248,7 @@ MsgCreateClassResponse is the Msg/CreateClass response type.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| id | [uint64](#uint64) |  | id of the stream |
 | sender | [string](#string) |  | sender must the the Stream admin |
 | paused | [bool](#bool) |  | the pause value to set |
 
@@ -237,7 +257,7 @@ MsgCreateClassResponse is the Msg/CreateClass response type.
 
 
 
-<a name="regen.ecocredit.v1alpha2.MsgRemoveAllocator"></a>
+<a name="regen.divvy.v1.MsgRemoveAllocator"></a>
 
 ### MsgRemoveAllocator
 
@@ -245,6 +265,7 @@ MsgCreateClassResponse is the Msg/CreateClass response type.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| id | [uint64](#uint64) |  | id of the allocator |
 | sender | [string](#string) |  | sender must the the Allocator admin |
 
 
@@ -252,7 +273,7 @@ MsgCreateClassResponse is the Msg/CreateClass response type.
 
 
 
-<a name="regen.ecocredit.v1alpha2.MsgSetAllocationMap"></a>
+<a name="regen.divvy.v1.MsgSetAllocationMap"></a>
 
 ### MsgSetAllocationMap
 
@@ -260,15 +281,16 @@ MsgCreateClassResponse is the Msg/CreateClass response type.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| id | [uint64](#uint64) |  | id of the allocator |
 | sender | [string](#string) |  | sender must the the Allocator admin |
-| recipients | [Recipient](#regen.ecocredit.v1alpha2.Recipient) | repeated | New allocator mapping. Invariants: * sum of shares in recipients must equal to 100% (1mln) |
+| recipients | [Recipient](#regen.divvy.v1.Recipient) | repeated | New allocator mapping. Invariants: * sum of shares in recipients must equal to 100% (1mln) |
 
 
 
 
 
 
-<a name="regen.ecocredit.v1alpha2.MsgUpdateAllocatorSetting"></a>
+<a name="regen.divvy.v1.MsgUpdateAllocatorSetting"></a>
 
 ### MsgUpdateAllocatorSetting
 
@@ -276,10 +298,11 @@ MsgCreateClassResponse is the Msg/CreateClass response type.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| id | [uint64](#uint64) |  | id of the allocator |
 | sender | [string](#string) |  | sender must the the Allocator admin |
 | start | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  |  |
 | end | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  |  |
-| interval | [google.protobuf.Duration](#google.protobuf.Duration) |  | how often we do a distribution, min 1s |
+| interval | [google.protobuf.Duration](#google.protobuf.Duration) |  | how often we do a distribution |
 | name | [string](#string) |  | name of the allocator |
 | url | [string](#string) |  | url with metadata |
 
@@ -294,20 +317,20 @@ MsgCreateClassResponse is the Msg/CreateClass response type.
  <!-- end HasExtensions -->
 
 
-<a name="regen.ecocredit.v1alpha2.Msg"></a>
+<a name="regen.divvy.v1.Msg"></a>
 
 ### Msg
-Msg is the regen.ecocredit.v1alpha1 Msg service.
+Msg is the divvy Msg service.
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| CreateAllocator | [MsgCreateAllocator](#regen.ecocredit.v1alpha2.MsgCreateAllocator) | [MsgCreateAllocatorResp](#regen.ecocredit.v1alpha2.MsgCreateAllocatorResp) | Allocator is a distribution engine, which distributes everything which is comming in configurable interval periods to registered recipients. Each allocator has only one owner. Ideally this can be managed by a group module. |
-| UpdateAllocatorSetting | [MsgUpdateAllocatorSetting](#regen.ecocredit.v1alpha2.MsgUpdateAllocatorSetting) | [MsgEmptyResp](#regen.ecocredit.v1alpha2.MsgEmptyResp) | Updates all allocator settings except admin and recipient map. |
-| SetAllocationMap | [MsgSetAllocationMap](#regen.ecocredit.v1alpha2.MsgSetAllocationMap) | [MsgEmptyResp](#regen.ecocredit.v1alpha2.MsgEmptyResp) | Allocator owner can update the recipient list by setting a new allocation map. |
-| RemoveAllocator | [MsgRemoveAllocator](#regen.ecocredit.v1alpha2.MsgRemoveAllocator) | [MsgCreateAllocatorResp](#regen.ecocredit.v1alpha2.MsgCreateAllocatorResp) | Removes allocator and disables all streamers! |
-| CreateSlowReleaseStream | [MsgCreateSlowReleaseStream](#regen.ecocredit.v1alpha2.MsgCreateSlowReleaseStream) | [MsgEmptyResp](#regen.ecocredit.v1alpha2.MsgEmptyResp) | Creates a new stream to feed an address User creates a stream. Parameters: * % of total amount to be streamed to allocator every second. * destination address where the stream will go (ideally allocator) |
-| PauseSlowReleaseStream | [MsgPauseSlowReleaseStream](#regen.ecocredit.v1alpha2.MsgPauseSlowReleaseStream) | [MsgEmptyResp](#regen.ecocredit.v1alpha2.MsgEmptyResp) |  |
-| EditSlowReleaseStream | [MsgEditSlowReleaseStream](#regen.ecocredit.v1alpha2.MsgEditSlowReleaseStream) | [MsgEmptyResp](#regen.ecocredit.v1alpha2.MsgEmptyResp) |  |
+| CreateAllocator | [MsgCreateAllocator](#regen.divvy.v1.MsgCreateAllocator) | [MsgCreateAllocatorResp](#regen.divvy.v1.MsgCreateAllocatorResp) | Allocator is a distribution engine, which "divvys out" all incoming funds, at configurable time intervals to all registered recipients. Each allocator has only one owner. Ideally this can be managed by a group module. |
+| UpdateAllocatorSetting | [MsgUpdateAllocatorSetting](#regen.divvy.v1.MsgUpdateAllocatorSetting) | [MsgEmptyResp](#regen.divvy.v1.MsgEmptyResp) | Updates all allocator settings except admin and recipient map. |
+| SetAllocationMap | [MsgSetAllocationMap](#regen.divvy.v1.MsgSetAllocationMap) | [MsgEmptyResp](#regen.divvy.v1.MsgEmptyResp) | Allocator owner can update the recipient list by setting a new allocation map. |
+| RemoveAllocator | [MsgRemoveAllocator](#regen.divvy.v1.MsgRemoveAllocator) | [MsgCreateAllocatorResp](#regen.divvy.v1.MsgCreateAllocatorResp) | Removes allocator and disables all streamers! |
+| CreateSlowReleaseStream | [MsgCreateSlowReleaseStream](#regen.divvy.v1.MsgCreateSlowReleaseStream) | [MsgCreateSlowReleaseStreamResp](#regen.divvy.v1.MsgCreateSlowReleaseStreamResp) | Creates a new stream to feed an address User creates a stream. Parameters: * % of total amount to be streamed to allocator every second. * destination address where the stream will go (ideally allocator) |
+| PauseSlowReleaseStream | [MsgPauseSlowReleaseStream](#regen.divvy.v1.MsgPauseSlowReleaseStream) | [MsgEmptyResp](#regen.divvy.v1.MsgEmptyResp) |  |
+| EditSlowReleaseStream | [MsgEditSlowReleaseStream](#regen.divvy.v1.MsgEditSlowReleaseStream) | [MsgEmptyResp](#regen.divvy.v1.MsgEmptyResp) |  |
 
  <!-- end services -->
 
