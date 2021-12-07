@@ -3,9 +3,10 @@ package client
 import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/regen-network/regen-ledger/v2/x/divvy"
 	"github.com/spf13/cobra"
 	// "github.com/regen-network/regen-ledger/v2/x/divvy"
+
+	"github.com/regen-network/regen-ledger/v2/x/divvy"
 )
 
 // QueryCmd returns the parent command for all x/divvy query commands.
@@ -21,6 +22,7 @@ func QueryCmd(name string) *cobra.Command {
 	}
 	cmd.AddCommand(
 		queryAllocatorsCmd(),
+		queryAllocatorCmd(),
 	)
 	return cmd
 }
@@ -28,6 +30,31 @@ func QueryCmd(name string) *cobra.Command {
 func qflags(cmd *cobra.Command) *cobra.Command {
 	flags.AddQueryFlagsToCmd(cmd)
 	return cmd
+}
+
+// queryAllocatorsCmd returns a query command that selects allocator by address.
+func queryAllocatorCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "allocator [address]",
+		Short: "selects allocator by address",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			c, ctx, err := mkQueryClient(cmd)
+			if err != nil {
+				return err
+			}
+			addr := args[0]
+			if err := parseAddress(addr, "allocator"); err != nil {
+				return err
+			}
+			res, err := c.Allocator(cmd.Context(), &divvy.QueryAllocator{
+				Address: addr,
+			})
+			return print(ctx, res, err)
+		},
+	}
+	flags.AddPaginationFlagsToCmd(cmd, "classes")
+	return qflags(cmd)
 }
 
 // queryAllocatorsCmd returns a query command that lists all allocators.

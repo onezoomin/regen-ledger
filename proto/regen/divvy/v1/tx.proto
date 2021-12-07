@@ -31,6 +31,8 @@ service Msg {
   // Removes allocator and disables all streamers!
   rpc RemoveAllocator(MsgRemoveAllocator) returns (MsgCreateAllocatorResp);
 
+  // rpc ClaimRewards(MsgClaimRewards) returns (MsgClaimRewardsResp);
+
   /** STREAMS **/
 
   // Creates a new stream to feed an address
@@ -146,6 +148,10 @@ message MsgCreateSlowReleaseStream {
     string fixed_amount = 10;
   }
 }
+
+/*************
+    STREAMS
+**************/
 
 // MsgCreateSlowReleaseStreamResp is response for
 // Msg/CreateSlowReleaseStreamResp

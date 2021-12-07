@@ -11,17 +11,6 @@ import (
 	"github.com/regen-network/regen-ledger/x/group/exported"
 )
 
-// storage key prefixes
-const (
-	allocatorTableSeqPrefix byte = 0x0
-	streamTableSeqPrefix    byte = 0x1
-)
-
-var (
-	allocatorTablePrefix = []byte{0x2}
-	streamTablePrefix    = []byte{0x3}
-)
-
 type serverImpl struct {
 	key        sdk.StoreKey
 	cdc        codec.Codec

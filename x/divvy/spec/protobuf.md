@@ -15,6 +15,7 @@
     - [StoreAllocator](#regen.divvy.v1.StoreAllocator)
   
 - [regen/divvy/v1/query.proto](#regen/divvy/v1/query.proto)
+    - [QueryAllocator](#regen.divvy.v1.QueryAllocator)
     - [QueryAllocators](#regen.divvy.v1.QueryAllocators)
     - [QueryAllocatorsByOwner](#regen.divvy.v1.QueryAllocatorsByOwner)
     - [QueryAllocatorsResp](#regen.divvy.v1.QueryAllocatorsResp)
@@ -184,6 +185,21 @@
 
 
 
+<a name="regen.divvy.v1.QueryAllocator"></a>
+
+### QueryAllocator
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| address | [string](#string) |  |  |
+
+
+
+
+
+
 <a name="regen.divvy.v1.QueryAllocators"></a>
 
 ### QueryAllocators
@@ -207,6 +223,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| owner | [string](#string) |  |  |
 | pagination | [cosmos.base.query.v1beta1.PageRequest](#cosmos.base.query.v1beta1.PageRequest) |  | pagination defines an optional pagination for the request. |
 
 
@@ -243,6 +260,7 @@ Msg is the divvy Msg service.
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
+| Allocator | [QueryAllocator](#regen.divvy.v1.QueryAllocator) | [Allocator](#regen.divvy.v1.Allocator) |  |
 | Allocators | [QueryAllocators](#regen.divvy.v1.QueryAllocators) | [QueryAllocatorsResp](#regen.divvy.v1.QueryAllocatorsResp) |  |
 | AllocatorsByOwner | [QueryAllocatorsByOwner](#regen.divvy.v1.QueryAllocatorsByOwner) | [QueryAllocatorsResp](#regen.divvy.v1.QueryAllocatorsResp) |  |
 

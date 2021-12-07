@@ -6,6 +6,9 @@ import (
 	"strconv"
 	"time"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/errors"
+
 	"github.com/regen-network/regen-ledger/v2/x/divvy"
 )
 
@@ -31,4 +34,11 @@ func parseRecipient(s string, errmsg []string) ([]divvy.Recipient, []string) {
 		errmsg = append(errmsg, fmt.Sprintf("invalid recipient map: %v", err))
 	}
 	return recipients, errmsg
+}
+
+func parseAddress(s, field string) error {
+	if _, err := sdk.AccAddressFromBech32(s); err != nil {
+		return errors.ErrInvalidAddress.Wrapf("%q is not a valid %s address", s, field)
+	}
+	return nil
 }
