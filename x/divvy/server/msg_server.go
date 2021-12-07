@@ -18,8 +18,17 @@ func (s serverImpl) CreateAllocator(goCtx context.Context, msg *divvy.MsgCreateA
 	if err := msg.Validate(ctx); err != nil {
 		return nil, err
 	}
-	id, err := s.allocatorTable.Create(ctx, msg)
-	return &divvy.MsgCreateAllocatorResp{Id: id}, err
+	id, err := s.allocatorTable.Create(ctx, &divvy.Allocator{
+		Admin:    msg.Admin,
+		Start:    msg.Start,
+		End:      msg.End,
+		Interval: msg.Interval,
+		Name:     msg.Name,
+		Url:      msg.Url,
+		Paused:   false,
+		Entries:  msg.Recipients,
+	})
+	return &divvy.MsgCreateAllocatorResp{Id: id}, ormError(err)
 }
 
 // Updates all allocator settings except admin and entry map.
