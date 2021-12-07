@@ -28,7 +28,17 @@ func (s serverImpl) CreateAllocator(goCtx context.Context, msg *divvy.MsgCreateA
 		Paused:   false,
 		Entries:  msg.Recipients,
 	})
-	return &divvy.MsgCreateAllocatorResp{Id: id}, ormError(err)
+	if err != nil {
+		return nil, ormError(err)
+	}
+	err = ctx.EventManager().EmitTypedEvent(&divvy.EventCreateAllocator{
+		Id: id,
+	})
+	if err != nil {
+		return nil, eventError(err)
+	}
+
+	return &divvy.MsgCreateAllocatorResp{Id: id}, nil
 }
 
 // Updates all allocator settings except admin and entry map.

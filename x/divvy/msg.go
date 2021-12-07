@@ -10,13 +10,12 @@ import (
 )
 
 var _ sdk.Msg = &MsgCreateAllocator{}
-
-// var _ sdk.Msg = &MsgUpdateAllocatorSetting{}}
-// var _ sdk.Msg = &MsgSetAllocationMap{}
-// var _ sdk.Msg = &MsgRemoveAllocator{}
-// var _ sdk.Msg = &MsgCreateSlowReleaseStream{}
-// var _ sdk.Msg = &MsgPauseSlowReleaseStream{}
-// var _ sdk.Msg = &MsgEditSlowReleaseStream{}
+var _ sdk.Msg = &MsgUpdateAllocatorSetting{}
+var _ sdk.Msg = &MsgSetAllocationMap{}
+var _ sdk.Msg = &MsgRemoveAllocator{}
+var _ sdk.Msg = &MsgCreateSlowReleaseStream{}
+var _ sdk.Msg = &MsgPauseSlowReleaseStream{}
+var _ sdk.Msg = &MsgEditSlowReleaseStream{}
 
 // GetSigners returns the expected signers for a MsgCreateGroup.
 func (msg MsgCreateAllocator) GetSigners() []sdk.AccAddress {
@@ -32,7 +31,7 @@ func (msg MsgCreateAllocator) ValidateBasic() error {
 	if err := validateRecipients(msg.Recipients); err != nil {
 		errs = append(errs, err.Error())
 	}
-	return errorStringsToError(errs)
+	return ErrorStringsToError(errs)
 }
 
 // Validate makes all additional validation (not present in ValidateBasic)
@@ -57,7 +56,7 @@ func (msg MsgUpdateAllocatorSetting) ValidateBasic() error {
 	if _, err := sdk.AccAddressFromBech32(msg.Sender); err != nil {
 		errs = append(errs, fmt.Sprintf("Malformed admin address [%s]", err.Error()))
 	}
-	return errorStringsToError(errs)
+	return ErrorStringsToError(errs)
 }
 
 /****************
@@ -99,7 +98,7 @@ func (msg MsgCreateSlowReleaseStream) ValidateBasic() error {
 	if err != nil {
 		errs = append(errs, fmt.Sprintf("`destination` address is malformed [%v]", err))
 	}
-	return errorStringsToError(errs)
+	return ErrorStringsToError(errs)
 }
 
 /****************
@@ -131,7 +130,7 @@ func (msg MsgEditSlowReleaseStream) ValidateBasic() error {
 	if err != nil {
 		errs = append(errs, fmt.Sprintf("`destination` address is malformed [%v]", err))
 	}
-	return errorStringsToError(errs)
+	return ErrorStringsToError(errs)
 }
 
 /*
@@ -148,6 +147,7 @@ func checkAllocatorTimestamps(start, end time.Time, interval time.Duration, name
 	var errs []string
 	if !end.After(start) {
 		errs = append(errs, "`end` must be after start")
+		fmt.Println("start:", start, "..... end", end)
 	}
 	if interval < time.Second {
 		errs = append(errs, "`interval` must be at least 1s")
@@ -162,6 +162,9 @@ func validateRecipients(entries []Recipient) error {
 	const expected = 1_000_000
 	var sum uint32 = 0
 	for i := range entries {
+		if _, err := sdk.AccAddressFromBech32(entries[i].Address); err != nil {
+			return fmt.Errorf("Wrong recipient %d, %w", i, err)
+		}
 		sum += entries[i].Share
 	}
 	if sum != expected {

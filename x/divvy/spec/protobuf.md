@@ -4,6 +4,10 @@
 
 ## Table of Contents
 
+- [regen/divvy/v1/events.proto](#regen/divvy/v1/events.proto)
+    - [EventCreateAllocator](#regen.divvy.v1.EventCreateAllocator)
+    - [EventCreateStream](#regen.divvy.v1.EventCreateStream)
+  
 - [regen/divvy/v1/types.proto](#regen/divvy/v1/types.proto)
     - [Allocator](#regen.divvy.v1.Allocator)
     - [Recipient](#regen.divvy.v1.Recipient)
@@ -27,6 +31,52 @@
     - [Msg](#regen.divvy.v1.Msg)
   
 - [Scalar Value Types](#scalar-value-types)
+
+
+
+<a name="regen/divvy/v1/events.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## regen/divvy/v1/events.proto
+
+
+
+<a name="regen.divvy.v1.EventCreateAllocator"></a>
+
+### EventCreateAllocator
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [uint64](#uint64) |  |  |
+
+
+
+
+
+
+<a name="regen.divvy.v1.EventCreateStream"></a>
+
+### EventCreateStream
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | [uint64](#uint64) |  |  |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+ <!-- end services -->
 
 
 

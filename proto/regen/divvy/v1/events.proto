@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package regen.divvy.v1;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/regen-network/regen-ledger/x/divvy";
+option (gogoproto.goproto_getters_all) = false;
+
+message EventCreateAllocator { uint64 id = 1; }
+
+message EventCreateStream { uint64 id = 1; }

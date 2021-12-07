@@ -1,14 +1,17 @@
 package divvy
 
 import (
-	fmt "fmt"
-
 	"github.com/cosmos/cosmos-sdk/types/errors"
+	"sigs.k8s.io/yaml"
 )
 
-func errorStringsToError(errmsgs []string) error {
+func ErrorStringsToError(errmsgs []string) error {
 	if len(errmsgs) != 0 {
-		return errors.Wrap(errors.ErrInvalidRequest, fmt.Sprintf("%v", errmsgs))
+		o, err := yaml.Marshal(errmsgs)
+		if err != nil {
+			panic(err)
+		}
+		return errors.Wrap(errors.ErrInvalidRequest, string(o))
 	}
 	return nil
 }
