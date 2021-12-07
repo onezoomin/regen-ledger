@@ -7,8 +7,6 @@ import (
 	"github.com/regen-network/regen-ledger/v2/x/divvy"
 )
 
-var s divvy.MsgServer
-
 // Allocator is a distribution engine, which distributes everything which is
 // comming in configurable interval periods to registered entries. Each
 // allocator has only one owner. Ideally this can be managed by a group

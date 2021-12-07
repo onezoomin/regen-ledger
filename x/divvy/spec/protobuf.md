@@ -14,6 +14,10 @@
     - [SlowReleaseStream](#regen.divvy.v1.SlowReleaseStream)
   
 - [regen/divvy/v1/query.proto](#regen/divvy/v1/query.proto)
+    - [QueryAllocators](#regen.divvy.v1.QueryAllocators)
+    - [QueryAllocatorsByOwner](#regen.divvy.v1.QueryAllocatorsByOwner)
+    - [QueryAllocatorsResp](#regen.divvy.v1.QueryAllocatorsResp)
+  
     - [Query](#regen.divvy.v1.Query)
   
 - [regen/divvy/v1/tx.proto](#regen/divvy/v1/tx.proto)
@@ -161,6 +165,52 @@
 ## regen/divvy/v1/query.proto
 
 
+
+<a name="regen.divvy.v1.QueryAllocators"></a>
+
+### QueryAllocators
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| pagination | [cosmos.base.query.v1beta1.PageRequest](#cosmos.base.query.v1beta1.PageRequest) |  | pagination defines an optional pagination for the request. |
+
+
+
+
+
+
+<a name="regen.divvy.v1.QueryAllocatorsByOwner"></a>
+
+### QueryAllocatorsByOwner
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| pagination | [cosmos.base.query.v1beta1.PageRequest](#cosmos.base.query.v1beta1.PageRequest) |  | pagination defines an optional pagination for the request. |
+
+
+
+
+
+
+<a name="regen.divvy.v1.QueryAllocatorsResp"></a>
+
+### QueryAllocatorsResp
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| allocator | [Allocator](#regen.divvy.v1.Allocator) | repeated |  |
+| pagination | [cosmos.base.query.v1beta1.PageResponse](#cosmos.base.query.v1beta1.PageResponse) |  | pagination defines the pagination in the response. |
+
+
+
+
+
  <!-- end messages -->
 
  <!-- end enums -->
@@ -175,6 +225,8 @@ Msg is the divvy Msg service.
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
+| Allocators | [QueryAllocators](#regen.divvy.v1.QueryAllocators) | [QueryAllocatorsResp](#regen.divvy.v1.QueryAllocatorsResp) |  |
+| AllocatorsByOwner | [QueryAllocatorsByOwner](#regen.divvy.v1.QueryAllocatorsByOwner) | [QueryAllocatorsResp](#regen.divvy.v1.QueryAllocatorsResp) |  |
 
  <!-- end services -->
 

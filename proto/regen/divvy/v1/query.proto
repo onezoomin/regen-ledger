@@ -2,18 +2,42 @@ syntax = "proto3";
 
 package regen.divvy.v1;
 
-import "cosmos/base/v1beta1/coin.proto";
 import "gogoproto/gogo.proto";
-import "google/protobuf/duration.proto";
-import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
 
 import "regen/divvy/v1/types.proto";
 
 option go_package = "github.com/regen-network/regen-ledger/x/divvy";
+option (gogoproto.goproto_getters_all) = false;
 
 // Msg is the divvy Msg service.
 service Query {
+  rpc Allocators(QueryAllocators) returns (QueryAllocatorsResp) {
+    option (google.api.http).get = "/regen/divvy/v1/allocators";
+  }
+
+  rpc AllocatorsByOwner(QueryAllocatorsByOwner) returns (QueryAllocatorsResp) {
+    option (google.api.http).get = "/regen/divvy/v1/allocators";
+  }
+
   // Queries:
   // + Get allocators by owner
   // + Get streams by owner
+}
+
+message QueryAllocatorsResp {
+  repeated Allocator allocator = 1 [ (gogoproto.nullable) = false ];
+  // pagination defines the pagination in the response.
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryAllocators {
+  // pagination defines an optional pagination for the request.
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllocatorsByOwner {
+  // pagination defines an optional pagination for the request.
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
 }
