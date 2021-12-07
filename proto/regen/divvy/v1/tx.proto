@@ -80,13 +80,13 @@ message MsgCreateAllocator {
 
 // MsgCreateClassResponse is the Msg/CreateAllocator response type.
 message MsgCreateAllocatorResp {
-  // id is the unique ID of the newly created allocator.
-  uint64 id = 1;
+  // Address is a unique address of newly created Allocator
+  string address = 1;
 }
 
 message MsgUpdateAllocatorSetting {
-  // id of the allocator
-  uint64 id = 1;
+  // address of the allocator
+  string address = 1;
 
   // sender must the the Allocator admin
   string sender = 2;
@@ -106,8 +106,8 @@ message MsgUpdateAllocatorSetting {
 }
 
 message MsgSetAllocationMap {
-  // id of the allocator
-  uint64 id = 1;
+  // address of the allocator
+  string address = 1;
 
   // sender must the the Allocator admin
   string sender = 2;
@@ -118,8 +118,8 @@ message MsgSetAllocationMap {
 }
 
 message MsgRemoveAllocator {
-  // id of the allocator
-  uint64 id = 1;
+  // address of the allocator
+  string address = 1;
   // sender must the the Allocator admin
   string sender = 2;
 }
@@ -150,13 +150,13 @@ message MsgCreateSlowReleaseStream {
 // MsgCreateSlowReleaseStreamResp is response for
 // Msg/CreateSlowReleaseStreamResp
 message MsgCreateSlowReleaseStreamResp {
-  // id is the unique ID of the newly created stream.
-  uint64 id = 1;
+  // address of the newly created streamer
+  string address = 1;
 }
 
 message MsgPauseSlowReleaseStream {
-  // id of the stream
-  uint64 id = 1;
+  // address of a stream
+  string address = 1;
 
   // sender must the the Stream admin
   string sender = 2;
@@ -165,8 +165,8 @@ message MsgPauseSlowReleaseStream {
 }
 
 message MsgEditSlowReleaseStream {
-  // id of the stream
-  uint64 id = 1;
+  // address of a stream
+  string address = 1;
 
   // sender must the the Stream admin
   string sender = 2;

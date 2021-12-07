@@ -16,9 +16,11 @@ message Recipient {
 
   // allocation share. 100% = 1e6.
   uint32 share = 2;
+
+  string name = 3;
 }
 
-message Allocator {
+message StoreAllocator {
   // admin is the address of the account that creates the allocator and signs
   // the message
   string admin = 1;
@@ -40,7 +42,13 @@ message Allocator {
   // Invariant:
   // * sum of shares in entires must equal to 100% (1mln)
   // list of allocation entries
-  repeated Recipient entries = 10 [ (gogoproto.nullable) = false ];
+  repeated Recipient recipients = 10 [ (gogoproto.nullable) = false ];
+}
+
+message Allocator {
+  // submodule address of the given allocator
+  string address = 1;
+  StoreAllocator a = 2 [ (gogoproto.nullable) = false ];
 }
 
 message SlowReleaseStream {

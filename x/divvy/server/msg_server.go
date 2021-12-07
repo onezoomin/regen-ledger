@@ -16,27 +16,33 @@ func (s serverImpl) CreateAllocator(goCtx context.Context, msg *divvy.MsgCreateA
 	if err := msg.Validate(ctx); err != nil {
 		return nil, err
 	}
-	id, err := s.allocatorTable.Create(ctx, &divvy.Allocator{
-		Admin:    msg.Admin,
-		Start:    msg.Start,
-		End:      msg.End,
-		Interval: msg.Interval,
-		Name:     msg.Name,
-		Url:      msg.Url,
-		Paused:   false,
-		Entries:  msg.Recipients,
+	addr := nextAddress(s.allocatorSeq, ctx, s.allocatorAddr)
+	db := s.getAllocatorStore(ctx)
+
+	bz, err := s.cdc.Marshal(&divvy.StoreAllocator{
+		Admin:      msg.Admin,
+		Start:      msg.Start,
+		End:        msg.End,
+		Interval:   msg.Interval,
+		Name:       msg.Name,
+		Url:        msg.Url,
+		Paused:     false,
+		Recipients: msg.Recipients,
 	})
 	if err != nil {
-		return nil, ormError(err)
+		return nil, err
 	}
+	db.Set(addr, bz)
+
+	addrStr := addr.String()
 	err = ctx.EventManager().EmitTypedEvent(&divvy.EventCreateAllocator{
-		Id: id,
+		Address: addrStr,
 	})
 	if err != nil {
 		return nil, eventError(err)
 	}
 
-	return &divvy.MsgCreateAllocatorResp{Id: id}, nil
+	return &divvy.MsgCreateAllocatorResp{Address: addrStr}, nil
 }
 
 // Updates all allocator settings except admin and entry map.

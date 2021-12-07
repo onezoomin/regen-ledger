@@ -3,6 +3,7 @@ package server
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/address"
 
 	"github.com/regen-network/regen-ledger/orm"
 	"github.com/regen-network/regen-ledger/types/module/server"
@@ -12,34 +13,35 @@ import (
 
 // storage key prefixes
 const (
-	allocatorTablePrefix    byte = 0x0
-	allocatorTableSeqPrefix byte = 0x1
+	allocatorTableSeqPrefix byte = 0x0
+	streamTableSeqPrefix    byte = 0x1
+)
 
-	streamTablePrefix    byte = 0x2
-	streamTableSeqPrefix byte = 0x3
+var (
+	allocatorTablePrefix = []byte{0x2}
+	streamTablePrefix    = []byte{0x3}
 )
 
 type serverImpl struct {
 	key        sdk.StoreKey
+	cdc        codec.Codec
 	bankKeeper exported.BankKeeper
 
-	allocatorTable orm.AutoUInt64Table
-	streamTable    orm.AutoUInt64Table
+	allocatorSeq orm.Sequence
+	streamSeq    orm.Sequence
+
+	// module addresses for deriving entity addresses
+	allocatorAddr sdk.Address
+	streamAddr    sdk.Address
 }
 
 func newServer(storeKey server.RootModuleKey, bank exported.BankKeeper, cdc codec.Codec) (serverImpl, error) {
-	s := serverImpl{key: storeKey, bankKeeper: bank}
-	allocatorTable, err := orm.NewAutoUInt64TableBuilder(allocatorTablePrefix, allocatorTableSeqPrefix, storeKey, &divvy.Allocator{}, cdc)
-	if err != nil {
-		return s, err
-	}
-	s.allocatorTable = allocatorTable.Build()
+	s := serverImpl{key: storeKey, cdc: cdc, bankKeeper: bank}
+	s.allocatorSeq = orm.NewSequence(storeKey, allocatorTableSeqPrefix)
+	s.streamSeq = orm.NewSequence(storeKey, streamTableSeqPrefix)
 
-	streamTable, err := orm.NewAutoUInt64TableBuilder(streamTablePrefix, streamTableSeqPrefix, storeKey, &divvy.SlowReleaseStream{}, cdc)
-	if err != nil {
-		return s, err
-	}
-	s.streamTable = streamTable.Build()
+	s.allocatorAddr = sdk.AccAddress(address.Module(divvy.ModuleName, allocatorTablePrefix))
+	s.streamAddr = sdk.AccAddress(address.Module(divvy.ModuleName, streamTablePrefix))
 
 	return s, nil
 }

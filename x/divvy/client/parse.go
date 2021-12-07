@@ -26,17 +26,9 @@ func parseUint(s, paramName string, errmsgs []string) (uint64, []string) {
 }
 
 func parseRecipient(s string, errmsg []string) ([]divvy.Recipient, []string) {
-	recipients := map[string]uint32{} // map address -> share
+	recipients := []divvy.Recipient{}
 	if err := json.Unmarshal([]byte(s), &recipients); err != nil {
-		errmsg = append(errmsg, fmt.Sprintf("invalid recipeint map: %v", err))
-		return nil, errmsg
+		errmsg = append(errmsg, fmt.Sprintf("invalid recipient map: %v", err))
 	}
-	var out = make([]divvy.Recipient, len(recipients))
-	var i = 0
-	for addr, share := range recipients {
-		out[i].Address = addr
-		out[i].Share = share
-		i++
-	}
-	return out, errmsg
+	return recipients, errmsg
 }

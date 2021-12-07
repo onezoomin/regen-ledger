@@ -12,6 +12,7 @@
     - [Allocator](#regen.divvy.v1.Allocator)
     - [Recipient](#regen.divvy.v1.Recipient)
     - [SlowReleaseStream](#regen.divvy.v1.SlowReleaseStream)
+    - [StoreAllocator](#regen.divvy.v1.StoreAllocator)
   
 - [regen/divvy/v1/query.proto](#regen/divvy/v1/query.proto)
     - [QueryAllocators](#regen.divvy.v1.QueryAllocators)
@@ -53,7 +54,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| id | [uint64](#uint64) |  |  |
+| address | [string](#string) |  |  |
 
 
 
@@ -68,7 +69,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| id | [uint64](#uint64) |  |  |
+| address | [string](#string) |  |  |
 
 
 
@@ -99,14 +100,8 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| admin | [string](#string) |  | admin is the address of the account that creates the allocator and signs the message |
-| start | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  |  |
-| end | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  |  |
-| interval | [google.protobuf.Duration](#google.protobuf.Duration) |  | how often we do a distribution, min = 1s |
-| name | [string](#string) |  | name of the allocator |
-| url | [string](#string) |  | url with metadata |
-| paused | [bool](#bool) |  |  |
-| entries | [Recipient](#regen.divvy.v1.Recipient) | repeated | Invariant: * sum of shares in entires must equal to 100% (1mln) list of allocation entries |
+| address | [string](#string) |  | submodule address of the given allocator |
+| a | [StoreAllocator](#regen.divvy.v1.StoreAllocator) |  |  |
 
 
 
@@ -123,6 +118,7 @@
 | ----- | ---- | ----- | ----------- |
 | address | [string](#string) |  | address wallet address |
 | share | [uint32](#uint32) |  | allocation share. 100% = 1e6. |
+| name | [string](#string) |  |  |
 
 
 
@@ -144,6 +140,28 @@
 | name | [string](#string) |  | name of the allocator |
 | paused | [bool](#bool) |  |  |
 | fixed_amount | [string](#string) |  | fixed amount of tokens streamed in each round. If there is a zero balance available then then nothing will be streamed. If only fraction is available then the it will be fully streamed. |
+
+
+
+
+
+
+<a name="regen.divvy.v1.StoreAllocator"></a>
+
+### StoreAllocator
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| admin | [string](#string) |  | admin is the address of the account that creates the allocator and signs the message |
+| start | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  |  |
+| end | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  |  |
+| interval | [google.protobuf.Duration](#google.protobuf.Duration) |  | how often we do a distribution, min = 1s |
+| name | [string](#string) |  | name of the allocator |
+| url | [string](#string) |  | url with metadata |
+| paused | [bool](#bool) |  |  |
+| recipients | [Recipient](#regen.divvy.v1.Recipient) | repeated | Invariant: * sum of shares in entires must equal to 100% (1mln) list of allocation entries |
 
 
 
@@ -268,7 +286,7 @@ MsgCreateClassResponse is the Msg/CreateAllocator response type.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| id | [uint64](#uint64) |  | id is the unique ID of the newly created allocator. |
+| address | [string](#string) |  | Address is a unique address of newly created Allocator |
 
 
 
@@ -304,7 +322,7 @@ Msg/CreateSlowReleaseStreamResp
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| id | [uint64](#uint64) |  | id is the unique ID of the newly created stream. |
+| address | [string](#string) |  | address of the newly created streamer |
 
 
 
@@ -319,7 +337,7 @@ Msg/CreateSlowReleaseStreamResp
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| id | [uint64](#uint64) |  | id of the stream |
+| address | [string](#string) |  | address of a stream |
 | sender | [string](#string) |  | sender must the the Stream admin |
 | start | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  | when the stream starts |
 | interval | [google.protobuf.Duration](#google.protobuf.Duration) |  | how often we do a distribution |
@@ -350,7 +368,7 @@ Msg/CreateSlowReleaseStreamResp
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| id | [uint64](#uint64) |  | id of the stream |
+| address | [string](#string) |  | address of a stream |
 | sender | [string](#string) |  | sender must the the Stream admin |
 | paused | [bool](#bool) |  | the pause value to set |
 
@@ -367,7 +385,7 @@ Msg/CreateSlowReleaseStreamResp
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| id | [uint64](#uint64) |  | id of the allocator |
+| address | [string](#string) |  | address of the allocator |
 | sender | [string](#string) |  | sender must the the Allocator admin |
 
 
@@ -383,7 +401,7 @@ Msg/CreateSlowReleaseStreamResp
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| id | [uint64](#uint64) |  | id of the allocator |
+| address | [string](#string) |  | address of the allocator |
 | sender | [string](#string) |  | sender must the the Allocator admin |
 | recipients | [Recipient](#regen.divvy.v1.Recipient) | repeated | New allocator mapping. Invariants: * sum of shares in recipients must equal to 100% (1mln) |
 
@@ -400,7 +418,7 @@ Msg/CreateSlowReleaseStreamResp
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| id | [uint64](#uint64) |  | id of the allocator |
+| address | [string](#string) |  | address of the allocator |
 | sender | [string](#string) |  | sender must the the Allocator admin |
 | start | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  |  |
 | end | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  |  |

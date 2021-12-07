@@ -7,6 +7,6 @@ import "gogoproto/gogo.proto";
 option go_package = "github.com/regen-network/regen-ledger/x/divvy";
 option (gogoproto.goproto_getters_all) = false;
 
-message EventCreateAllocator { uint64 id = 1; }
+message EventCreateAllocator { string address = 1; }
 
-message EventCreateStream { uint64 id = 1; }
+message EventCreateStream { string address = 1; }
