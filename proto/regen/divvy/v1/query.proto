@@ -13,7 +13,7 @@ option (gogoproto.goproto_getters_all) = false;
 
 // Msg is the divvy Msg service.
 service Query {
-  rpc Allocator(QueryAllocator) returns (Allocator) {
+  rpc AllocatorByAddress(QueryAllocator) returns (Allocator) {
     option (google.api.http).get = "/regen/divvy/v1/allocator/{address}";
   }
 
