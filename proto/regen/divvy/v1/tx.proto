@@ -126,6 +126,22 @@ message MsgRemoveAllocator {
   string sender = 2;
 }
 
+message MsgClaimAllocations {
+  // signer, anyone can claim rewards
+  string sender = 1;
+  // allocator address
+  string allocator = 2;
+}
+
+message MsgClaimAllocationsResp {
+  // distributed allocations
+  repeated cosmos.base.v1beta1.Coin coins = 1 [ (gogoproto.nullable) = false ];
+}
+
+/*************
+    STREAMS
+**************/
+
 message MsgCreateSlowReleaseStream {
   // signer and creator of the stream
   string admin = 2;
@@ -148,22 +164,6 @@ message MsgCreateSlowReleaseStream {
     string fixed_amount = 10;
   }
 }
-
-message MsgClaimAllocations {
-  // signer, anyone can claim rewards
-  string sender = 1;
-  // allocator address
-  string allocator = 2;
-}
-
-message MsgClaimAllocationsResp {
-  // distributed allocations
-  repeated cosmos.base.v1beta1.Coin coins = 1 [ (gogoproto.nullable) = false ];
-}
-
-/*************
-    STREAMS
-**************/
 
 // MsgCreateSlowReleaseStreamResp is response for
 // Msg/CreateSlowReleaseStreamResp
