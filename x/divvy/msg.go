@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	// sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/regen-network/regen-ledger/types"
 )
 
@@ -80,6 +80,19 @@ func (msg MsgRemoveAllocator) GetSigners() []sdk.AccAddress {
 }
 
 func (msg MsgRemoveAllocator) ValidateBasic() error { return nil }
+
+/****************
+  MsgClaimAllocations
+  /**************/
+
+func (msg MsgClaimAllocations) GetSigners() []sdk.AccAddress {
+	return getSingers(msg.Sender)
+}
+
+func (msg MsgClaimAllocations) ValidateBasic() error {
+	_, err := sdk.AccAddressFromBech32(msg.Allocator)
+	return errors.ErrInvalidAddress.Wrapf("allocator_address [%v]", err)
+}
 
 /****************
   MsgCreateSlowReleaseStream

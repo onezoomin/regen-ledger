@@ -154,8 +154,6 @@ message MsgClaimAllocations {
   string sender = 1;
   // allocator address
   string allocator = 2;
-  // recipeint address, must be one of the allocator recipients.
-  string recipient = 3;
 }
 
 message MsgClaimAllocationsResp {

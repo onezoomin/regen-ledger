@@ -3,7 +3,6 @@ package client
 import (
 	"time"
 
-	"fmt"
 	sdkclient "github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
@@ -23,6 +22,7 @@ func TxCmd(name string) *cobra.Command {
 	}
 	cmd.AddCommand(
 		TxCreateAllocator(),
+		TxClaimAllocator(),
 	)
 	return cmd
 }
@@ -55,8 +55,6 @@ func TxCreateAllocator() *cobra.Command {
 				return err
 			}
 
-			fmt.Println(">>> end after start", endTime.After(startTime))
-
 			msg := divvy.MsgCreateAllocator{
 				Admin:      admin.String(),
 				Start:      startTime,
@@ -66,6 +64,27 @@ func TxCreateAllocator() *cobra.Command {
 				Url:        args[1],
 				Recipients: recipients,
 			}
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), &msg)
+		},
+	})
+}
+
+// TxClaimAllocator returns a transaction command that distribute allocator balances to
+// recipients.
+func TxClaimAllocator() *cobra.Command {
+	return txflags(&cobra.Command{
+		Use:   "claim [allocator_address]",
+		Short: "distribute allocator balances to its recipients",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := sdkclient.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+			msg := divvy.MsgClaimAllocations{Allocator: args[0]}
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

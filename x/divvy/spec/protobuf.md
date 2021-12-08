@@ -306,7 +306,6 @@ Msg is the divvy Msg service.
 | ----- | ---- | ----- | ----------- |
 | sender | [string](#string) |  | signer, anyone can claim rewards |
 | allocator | [string](#string) |  | allocator address |
-| recipient | [string](#string) |  | recipeint address, must be one of the allocator recipients. |
 
 
 
