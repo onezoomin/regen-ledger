@@ -11,8 +11,10 @@ import (
 
 var _ sdk.Msg = &MsgCreateAllocator{}
 var _ sdk.Msg = &MsgUpdateAllocatorSetting{}
-var _ sdk.Msg = &MsgSetAllocationMap{}
+var _ sdk.Msg = &MsgSetAllocatorRecipients{}
 var _ sdk.Msg = &MsgRemoveAllocator{}
+var _ sdk.Msg = &MsgClaimAllocations{}
+
 var _ sdk.Msg = &MsgCreateSlowReleaseStream{}
 var _ sdk.Msg = &MsgPauseSlowReleaseStream{}
 var _ sdk.Msg = &MsgEditSlowReleaseStream{}
@@ -63,11 +65,11 @@ func (msg MsgUpdateAllocatorSetting) ValidateBasic() error {
   MsgSetAllocationMap
   /**************/
 
-func (msg MsgSetAllocationMap) GetSigners() []sdk.AccAddress {
+func (msg MsgSetAllocatorRecipients) GetSigners() []sdk.AccAddress {
 	return getSingers(msg.Sender)
 }
 
-func (msg MsgSetAllocationMap) ValidateBasic() error {
+func (msg MsgSetAllocatorRecipients) ValidateBasic() error {
 	return validateRecipients(msg.Recipients)
 }
 

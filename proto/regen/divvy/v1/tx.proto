@@ -26,7 +26,7 @@ service Msg {
 
   // Allocator owner can update the recipient list by setting a new
   // allocation map.
-  rpc SetAllocationMap(MsgSetAllocationMap) returns (MsgEmptyResp);
+  rpc SetAllocatorRecipients(MsgSetAllocatorRecipients) returns (MsgEmptyResp);
 
   // Removes allocator and disables all streamers!
   rpc RemoveAllocator(MsgRemoveAllocator) returns (MsgCreateAllocatorResp);
@@ -107,7 +107,7 @@ message MsgUpdateAllocatorSetting {
   string url = 7;
 }
 
-message MsgSetAllocationMap {
+message MsgSetAllocatorRecipients {
   // address of the allocator
   string address = 1;
 

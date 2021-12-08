@@ -34,7 +34,7 @@
     - [MsgEmptyResp](#regen.divvy.v1.MsgEmptyResp)
     - [MsgPauseSlowReleaseStream](#regen.divvy.v1.MsgPauseSlowReleaseStream)
     - [MsgRemoveAllocator](#regen.divvy.v1.MsgRemoveAllocator)
-    - [MsgSetAllocationMap](#regen.divvy.v1.MsgSetAllocationMap)
+    - [MsgSetAllocatorRecipients](#regen.divvy.v1.MsgSetAllocatorRecipients)
     - [MsgUpdateAllocatorSetting](#regen.divvy.v1.MsgUpdateAllocatorSetting)
   
     - [Msg](#regen.divvy.v1.Msg)
@@ -463,9 +463,9 @@ Msg/CreateSlowReleaseStreamResp
 
 
 
-<a name="regen.divvy.v1.MsgSetAllocationMap"></a>
+<a name="regen.divvy.v1.MsgSetAllocatorRecipients"></a>
 
-### MsgSetAllocationMap
+### MsgSetAllocatorRecipients
 
 
 
@@ -516,7 +516,7 @@ Msg is the divvy Msg service.
 | ----------- | ------------ | ------------- | ------------|
 | CreateAllocator | [MsgCreateAllocator](#regen.divvy.v1.MsgCreateAllocator) | [MsgCreateAllocatorResp](#regen.divvy.v1.MsgCreateAllocatorResp) | Allocator is a distribution engine, which "divvys out" all incoming funds, at configurable time intervals to all registered recipients. Each allocator has only one owner. Ideally this can be managed by a group module. |
 | UpdateAllocatorSetting | [MsgUpdateAllocatorSetting](#regen.divvy.v1.MsgUpdateAllocatorSetting) | [MsgEmptyResp](#regen.divvy.v1.MsgEmptyResp) | Updates all allocator settings except admin and recipient map. |
-| SetAllocationMap | [MsgSetAllocationMap](#regen.divvy.v1.MsgSetAllocationMap) | [MsgEmptyResp](#regen.divvy.v1.MsgEmptyResp) | Allocator owner can update the recipient list by setting a new allocation map. |
+| SetAllocatorRecipients | [MsgSetAllocatorRecipients](#regen.divvy.v1.MsgSetAllocatorRecipients) | [MsgEmptyResp](#regen.divvy.v1.MsgEmptyResp) | Allocator owner can update the recipient list by setting a new allocation map. |
 | RemoveAllocator | [MsgRemoveAllocator](#regen.divvy.v1.MsgRemoveAllocator) | [MsgCreateAllocatorResp](#regen.divvy.v1.MsgCreateAllocatorResp) | Removes allocator and disables all streamers! |
 | ClaimAllocations | [MsgClaimAllocations](#regen.divvy.v1.MsgClaimAllocations) | [MsgClaimAllocationsResp](#regen.divvy.v1.MsgClaimAllocationsResp) |  |
 | CreateSlowReleaseStream | [MsgCreateSlowReleaseStream](#regen.divvy.v1.MsgCreateSlowReleaseStream) | [MsgCreateSlowReleaseStreamResp](#regen.divvy.v1.MsgCreateSlowReleaseStreamResp) | Creates a new stream to feed an address User creates a stream. Parameters: * % of total amount to be streamed to allocator every second. * destination address where the stream will go (ideally allocator) |

@@ -3,6 +3,7 @@ package server
 import (
 	"encoding/binary"
 
+	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/address"
@@ -71,4 +72,13 @@ func deriveKeyFromAddr(prefix []byte, addr string) ([]byte, error) {
 	key := make([]byte, 0, len(prefix)+len(a))
 	key = append(key, prefix...)
 	return append(key, a...), nil
+}
+
+func save(db sdk.KVStore, key []byte, o codec.ProtoMarshaler, cdc codec.BinaryCodec) error {
+	bz, err := cdc.Marshal(o)
+	if err != nil {
+		return err
+	}
+	db.Set(key, bz)
+	return nil
 }

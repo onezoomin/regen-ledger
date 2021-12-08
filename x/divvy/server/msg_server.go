@@ -20,7 +20,6 @@ func (s serverImpl) CreateAllocator(goCtx context.Context, msg *divvy.MsgCreateA
 		return nil, err
 	}
 	addr := nextAddress(s.allocatorSeq, ctx, s.allocatorAddr)
-	db := s.getAllocatorStore(ctx)
 
 	a := divvy.StoreAllocator{
 		Admin:    msg.Admin,
@@ -35,11 +34,10 @@ func (s serverImpl) CreateAllocator(goCtx context.Context, msg *divvy.MsgCreateA
 	if err != nil {
 		return nil, err
 	}
-	bz, err := s.cdc.Marshal(&a)
-	if err != nil {
+	db := s.getAllocatorStore(ctx)
+	if err = save(db, addr, &a, s.cdc); err != nil {
 		return nil, err
 	}
-	db.Set(addr, bz)
 
 	addrStr := addr.String()
 	err = ctx.EventManager().EmitTypedEvent(&divvy.EventCreateAllocator{
@@ -75,8 +73,21 @@ func (s serverImpl) UpdateAllocatorSetting(goCtx context.Context, msg *divvy.Msg
 
 // Allocator owner can update the recipient list by setting a new
 // allocation map.
-func (s serverImpl) SetAllocationMap(goCtx context.Context, msg *divvy.MsgSetAllocationMap) (*divvy.MsgEmptyResp, error) {
-	panic("not implemented") // TODO: Implement
+func (s serverImpl) SetAllocatorRecipients(goCtx context.Context, msg *divvy.MsgSetAllocatorRecipients) (*divvy.MsgEmptyResp, error) {
+	ctx, err := unwrapAndCheck(goCtx, msg)
+	if err != nil {
+		return nil, err
+	}
+	addr, a, err := s.getAllocator(ctx, msg.Address)
+	if err != nil {
+		return nil, err
+	}
+	a.Recipients, err = recipientsToStoreRecipients(msg.Recipients)
+	if err != nil {
+		return nil, err
+	}
+	db := s.getAllocatorStore(ctx)
+	return &divvy.MsgEmptyResp{}, save(db, addr, a, s.cdc)
 }
 
 // Removes allocator and disables all streamers!
