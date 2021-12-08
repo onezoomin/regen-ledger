@@ -13,10 +13,8 @@ option (gogoproto.goproto_getters_all) = false;
 message Recipient {
   // address wallet address
   string address = 1;
-
   // allocation share. 100% = 1e6.
   uint32 share = 2;
-
   string name = 3;
 }
 
@@ -42,7 +40,18 @@ message StoreAllocator {
   // Invariant:
   // * sum of shares in entires must equal to 100% (1mln)
   // list of allocation entries
-  repeated Recipient recipients = 10 [ (gogoproto.nullable) = false ];
+  repeated StoreRecipient recipients = 10 [ (gogoproto.nullable) = false ];
+  // timestamp when anyone can call for the next time.
+  google.protobuf.Timestamp next_claim = 11
+      [ (gogoproto.nullable) = false, (gogoproto.stdtime) = true ];
+}
+
+message StoreRecipient {
+  // address wallet address
+  bytes address = 1;
+  // allocation share. 100% = 1e6.
+  uint32 share = 2;
+  string name = 3;
 }
 
 message Allocator {

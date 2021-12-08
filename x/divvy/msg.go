@@ -158,8 +158,10 @@ func checkAllocatorTimestamps(start, end time.Time, interval time.Duration, name
 	return errs
 }
 
+// TotalShares is a number for 100% shares
+const TotalShares = 1_000_000
+
 func validateRecipients(entries []Recipient) error {
-	const expected = 1_000_000
 	var sum uint32 = 0
 	for i := range entries {
 		if _, err := sdk.AccAddressFromBech32(entries[i].Address); err != nil {
@@ -167,8 +169,8 @@ func validateRecipients(entries []Recipient) error {
 		}
 		sum += entries[i].Share
 	}
-	if sum != expected {
-		return fmt.Errorf("sum of shares in entries must be %d, got %d", expected, sum)
+	if sum != TotalShares {
+		return fmt.Errorf("sum of shares in entries must be %d, got %d", TotalShares, sum)
 	}
 	return nil
 }

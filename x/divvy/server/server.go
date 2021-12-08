@@ -8,13 +8,12 @@ import (
 	"github.com/regen-network/regen-ledger/orm"
 	"github.com/regen-network/regen-ledger/types/module/server"
 	"github.com/regen-network/regen-ledger/v2/x/divvy"
-	"github.com/regen-network/regen-ledger/x/group/exported"
 )
 
 type serverImpl struct {
-	key        sdk.StoreKey
-	cdc        codec.Codec
-	bankKeeper exported.BankKeeper
+	key  sdk.StoreKey
+	cdc  codec.Codec
+	bank divvy.BankKeeper
 
 	allocatorSeq orm.Sequence
 	streamSeq    orm.Sequence
@@ -24,8 +23,8 @@ type serverImpl struct {
 	streamAddr    sdk.Address
 }
 
-func newServer(storeKey server.RootModuleKey, bank exported.BankKeeper, cdc codec.Codec) (serverImpl, error) {
-	s := serverImpl{key: storeKey, cdc: cdc, bankKeeper: bank}
+func newServer(storeKey server.RootModuleKey, bank divvy.BankKeeper, cdc codec.Codec) (serverImpl, error) {
+	s := serverImpl{key: storeKey, cdc: cdc, bank: bank}
 	s.allocatorSeq = orm.NewSequence(storeKey, allocatorTableSeqPrefix)
 	s.streamSeq = orm.NewSequence(storeKey, streamTableSeqPrefix)
 

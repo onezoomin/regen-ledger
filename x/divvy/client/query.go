@@ -47,7 +47,7 @@ func queryAllocatorCmd() *cobra.Command {
 			if err := parseAddress(addr, "allocator"); err != nil {
 				return err
 			}
-			res, err := c.Allocator(cmd.Context(), &divvy.QueryAllocator{
+			res, err := c.AllocatorByAddress(cmd.Context(), &divvy.QueryAllocator{
 				Address: addr,
 			})
 			return print(ctx, res, err)

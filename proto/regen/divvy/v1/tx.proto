@@ -31,7 +31,7 @@ service Msg {
   // Removes allocator and disables all streamers!
   rpc RemoveAllocator(MsgRemoveAllocator) returns (MsgCreateAllocatorResp);
 
-  // rpc ClaimRewards(MsgClaimRewards) returns (MsgClaimRewardsResp);
+  rpc ClaimAllocations(MsgClaimAllocations) returns (MsgClaimAllocationsResp);
 
   /** STREAMS **/
 
@@ -147,6 +147,20 @@ message MsgCreateSlowReleaseStream {
     // available then the it will be fully streamed.
     string fixed_amount = 10;
   }
+}
+
+message MsgClaimAllocations {
+  // signer, anyone can claim rewards
+  string sender = 1;
+  // allocator address
+  string allocator = 2;
+  // recipeint address, must be one of the allocator recipients.
+  string recipient = 3;
+}
+
+message MsgClaimAllocationsResp {
+  // distributed allocations
+  repeated cosmos.base.v1beta1.Coin coins = 1 [ (gogoproto.nullable) = false ];
 }
 
 /*************

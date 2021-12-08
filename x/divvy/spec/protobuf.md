@@ -13,6 +13,7 @@
     - [Recipient](#regen.divvy.v1.Recipient)
     - [SlowReleaseStream](#regen.divvy.v1.SlowReleaseStream)
     - [StoreAllocator](#regen.divvy.v1.StoreAllocator)
+    - [StoreRecipient](#regen.divvy.v1.StoreRecipient)
   
 - [regen/divvy/v1/query.proto](#regen/divvy/v1/query.proto)
     - [QueryAllocator](#regen.divvy.v1.QueryAllocator)
@@ -23,6 +24,8 @@
     - [Query](#regen.divvy.v1.Query)
   
 - [regen/divvy/v1/tx.proto](#regen/divvy/v1/tx.proto)
+    - [MsgClaimAllocations](#regen.divvy.v1.MsgClaimAllocations)
+    - [MsgClaimAllocationsResp](#regen.divvy.v1.MsgClaimAllocationsResp)
     - [MsgCreateAllocator](#regen.divvy.v1.MsgCreateAllocator)
     - [MsgCreateAllocatorResp](#regen.divvy.v1.MsgCreateAllocatorResp)
     - [MsgCreateSlowReleaseStream](#regen.divvy.v1.MsgCreateSlowReleaseStream)
@@ -162,7 +165,25 @@
 | name | [string](#string) |  | name of the allocator |
 | url | [string](#string) |  | url with metadata |
 | paused | [bool](#bool) |  |  |
-| recipients | [Recipient](#regen.divvy.v1.Recipient) | repeated | Invariant: * sum of shares in entires must equal to 100% (1mln) list of allocation entries |
+| recipients | [StoreRecipient](#regen.divvy.v1.StoreRecipient) | repeated | Invariant: * sum of shares in entires must equal to 100% (1mln) list of allocation entries |
+| next_claim | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  | timestamp when anyone can call for the next time. |
+
+
+
+
+
+
+<a name="regen.divvy.v1.StoreRecipient"></a>
+
+### StoreRecipient
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| address | [bytes](#bytes) |  | address wallet address |
+| share | [uint32](#uint32) |  | allocation share. 100% = 1e6. |
+| name | [string](#string) |  |  |
 
 
 
@@ -260,7 +281,7 @@ Msg is the divvy Msg service.
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| Allocator | [QueryAllocator](#regen.divvy.v1.QueryAllocator) | [Allocator](#regen.divvy.v1.Allocator) |  |
+| AllocatorByAddress | [QueryAllocator](#regen.divvy.v1.QueryAllocator) | [Allocator](#regen.divvy.v1.Allocator) |  |
 | Allocators | [QueryAllocators](#regen.divvy.v1.QueryAllocators) | [QueryAllocatorsResp](#regen.divvy.v1.QueryAllocatorsResp) |  |
 | AllocatorsByOwner | [QueryAllocatorsByOwner](#regen.divvy.v1.QueryAllocatorsByOwner) | [QueryAllocatorsResp](#regen.divvy.v1.QueryAllocatorsResp) |  |
 
@@ -272,6 +293,38 @@ Msg is the divvy Msg service.
 <p align="right"><a href="#top">Top</a></p>
 
 ## regen/divvy/v1/tx.proto
+
+
+
+<a name="regen.divvy.v1.MsgClaimAllocations"></a>
+
+### MsgClaimAllocations
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| sender | [string](#string) |  | signer, anyone can claim rewards |
+| allocator | [string](#string) |  | allocator address |
+| recipient | [string](#string) |  | recipeint address, must be one of the allocator recipients. |
+
+
+
+
+
+
+<a name="regen.divvy.v1.MsgClaimAllocationsResp"></a>
+
+### MsgClaimAllocationsResp
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| coins | [cosmos.base.v1beta1.Coin](#cosmos.base.v1beta1.Coin) | repeated | distributed allocations |
+
+
+
 
 
 
@@ -466,6 +519,7 @@ Msg is the divvy Msg service.
 | UpdateAllocatorSetting | [MsgUpdateAllocatorSetting](#regen.divvy.v1.MsgUpdateAllocatorSetting) | [MsgEmptyResp](#regen.divvy.v1.MsgEmptyResp) | Updates all allocator settings except admin and recipient map. |
 | SetAllocationMap | [MsgSetAllocationMap](#regen.divvy.v1.MsgSetAllocationMap) | [MsgEmptyResp](#regen.divvy.v1.MsgEmptyResp) | Allocator owner can update the recipient list by setting a new allocation map. |
 | RemoveAllocator | [MsgRemoveAllocator](#regen.divvy.v1.MsgRemoveAllocator) | [MsgCreateAllocatorResp](#regen.divvy.v1.MsgCreateAllocatorResp) | Removes allocator and disables all streamers! |
+| ClaimAllocations | [MsgClaimAllocations](#regen.divvy.v1.MsgClaimAllocations) | [MsgClaimAllocationsResp](#regen.divvy.v1.MsgClaimAllocationsResp) |  |
 | CreateSlowReleaseStream | [MsgCreateSlowReleaseStream](#regen.divvy.v1.MsgCreateSlowReleaseStream) | [MsgCreateSlowReleaseStreamResp](#regen.divvy.v1.MsgCreateSlowReleaseStreamResp) | Creates a new stream to feed an address User creates a stream. Parameters: * % of total amount to be streamed to allocator every second. * destination address where the stream will go (ideally allocator) |
 | PauseSlowReleaseStream | [MsgPauseSlowReleaseStream](#regen.divvy.v1.MsgPauseSlowReleaseStream) | [MsgEmptyResp](#regen.divvy.v1.MsgEmptyResp) |  |
 | EditSlowReleaseStream | [MsgEditSlowReleaseStream](#regen.divvy.v1.MsgEditSlowReleaseStream) | [MsgEmptyResp](#regen.divvy.v1.MsgEmptyResp) |  |

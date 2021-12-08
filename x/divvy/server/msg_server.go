@@ -3,6 +3,8 @@ package server
 import (
 	"context"
 
+	"github.com/cosmos/cosmos-sdk/types/errors"
+
 	"github.com/regen-network/regen-ledger/types"
 	"github.com/regen-network/regen-ledger/v2/x/divvy"
 )
@@ -13,22 +15,27 @@ import (
 // module.
 func (s serverImpl) CreateAllocator(goCtx context.Context, msg *divvy.MsgCreateAllocator) (*divvy.MsgCreateAllocatorResp, error) {
 	ctx := types.UnwrapSDKContext(goCtx)
-	if err := msg.Validate(ctx); err != nil {
+	err := msg.Validate(ctx)
+	if err != nil {
 		return nil, err
 	}
 	addr := nextAddress(s.allocatorSeq, ctx, s.allocatorAddr)
 	db := s.getAllocatorStore(ctx)
 
-	bz, err := s.cdc.Marshal(&divvy.StoreAllocator{
-		Admin:      msg.Admin,
-		Start:      msg.Start,
-		End:        msg.End,
-		Interval:   msg.Interval,
-		Name:       msg.Name,
-		Url:        msg.Url,
-		Paused:     false,
-		Recipients: msg.Recipients,
-	})
+	a := divvy.StoreAllocator{
+		Admin:    msg.Admin,
+		Start:    msg.Start,
+		End:      msg.End,
+		Interval: msg.Interval,
+		Name:     msg.Name,
+		Url:      msg.Url,
+		Paused:   false,
+	}
+	a.Recipients, err = recipientsToStoreRecipients(msg.Recipients)
+	if err != nil {
+		return nil, err
+	}
+	bz, err := s.cdc.Marshal(&a)
 	if err != nil {
 		return nil, err
 	}
@@ -43,6 +50,22 @@ func (s serverImpl) CreateAllocator(goCtx context.Context, msg *divvy.MsgCreateA
 	}
 
 	return &divvy.MsgCreateAllocatorResp{Address: addrStr}, nil
+}
+
+// anyone can claim allocatinos for registered recipient
+func (s serverImpl) ClaimAllocations(goCtx context.Context, msg *divvy.MsgClaimAllocations) (*divvy.MsgClaimAllocationsResp, error) {
+	ctx, err := unwrapAndCheck(goCtx, msg)
+	if err != nil {
+		return nil, err
+	}
+	addr, a, err := s.getAllocator(ctx, msg.Recipient)
+	now := ctx.BlockTime()
+	if now.Before(a.NextClaim) {
+		return nil, errors.ErrInvalidRequest.Wrapf("Claim only possible after %v", a.NextClaim)
+	}
+	a.NextClaim = now.Add(a.Interval)
+	coins, err := distributeBalance(addr, a, s.bank, &ctx.Context)
+	return &divvy.MsgClaimAllocationsResp{Coins: coins}, err
 }
 
 // Updates all allocator settings except admin and entry map.

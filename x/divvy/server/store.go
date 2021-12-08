@@ -6,8 +6,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/address"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/regen-network/regen-ledger/orm"
+	"github.com/regen-network/regen-ledger/v2/x/divvy"
 )
 
 // storage key prefixes
@@ -43,11 +45,25 @@ func (s serverImpl) getStreamStore(ctx orm.HasKVStore) sdk.KVStore {
 	return prefix.NewStore(d, streamTablePrefix)
 }
 
-func getAllocatorKey(allocator string) ([]byte, error) {
-	return getKey(allocatorTablePrefix, allocator)
+func (s serverImpl) getAllocator(ctx orm.HasKVStore, address string) (sdk.AccAddress, *divvy.StoreAllocator, error) {
+	key, err := getAllocatorKey(address)
+	if err != nil {
+		return nil, nil, err
+	}
+	bz := ctx.KVStore(s.key).Get(key)
+	if bz == nil {
+		return nil, nil, sdkerrors.ErrNotFound.Wrapf("key not found: %q", key)
+	}
+	var a divvy.StoreAllocator
+	return key, &a, s.cdc.Unmarshal(bz, &a)
 }
 
-func getKey(prefix []byte, addr string) ([]byte, error) {
+// Create store key prefix based on allocator bech32 address
+func getAllocatorKey(allocatorAddr string) ([]byte, error) {
+	return deriveKeyFromAddr(allocatorTablePrefix, allocatorAddr)
+}
+
+func deriveKeyFromAddr(prefix []byte, addr string) ([]byte, error) {
 	a, err := sdk.AccAddressFromBech32(addr)
 	if err != nil {
 		return nil, err
