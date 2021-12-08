@@ -27,8 +27,8 @@ export PATH=~/go/bin:$PATH
 
 echo "REGEN Version: `regen version`"
 
-regen keys add validator --keyring-backend ${KeyringBackend} || exit_with_error "Error: Validator add failed"
-regen keys add delegator --keyring-backend ${KeyringBackend} || exit_with_error "Error: Delegator add failed"
+regen keys show validator --keyring-backend ${KeyringBackend} || regen keys add validator --keyring-backend ${KeyringBackend} || exit_with_error "Error: Validator add failed"
+regen keys show delegator --keyring-backend ${KeyringBackend} || regen keys add delegator --keyring-backend ${KeyringBackend} || exit_with_error "Error: Delegator add failed"
 regen init node --chain-id ${Chain} || exit_with_error "Error: Could not init node"
 
 # Change the staking token to uregen
