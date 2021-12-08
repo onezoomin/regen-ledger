@@ -19,10 +19,7 @@ func (s serverImpl) AllocatorByAddress(goCtx context.Context, req *divvy.QueryAl
 		return nil, err
 	}
 	_, a, err := s.getAllocator(ctx, req.Address)
-	return &divvy.Allocator{
-		Address: req.Address,
-		A:       *a,
-	}, err
+	return storeAllocatorToAllocator(a, req.Address), err
 }
 
 func (s serverImpl) Allocators(goCtx context.Context, req *divvy.QueryAllocators) (*divvy.QueryAllocatorsResp, error) {
@@ -37,7 +34,7 @@ func (s serverImpl) Allocators(goCtx context.Context, req *divvy.QueryAllocators
 		if err := s.cdc.Unmarshal(val, &a); err != nil {
 			return err
 		}
-		as = append(as, divvy.Allocator{Address: sdk.AccAddress(key).String(), A: a})
+		as = append(as, *storeAllocatorToAllocator(&a, sdk.AccAddress(key).String()))
 		return nil
 	})
 

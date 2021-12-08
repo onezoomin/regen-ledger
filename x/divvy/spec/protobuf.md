@@ -104,8 +104,16 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| admin | [string](#string) |  | admin is the address of the account that creates the allocator and signs the message |
+| start | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  |  |
+| end | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  |  |
+| interval | [google.protobuf.Duration](#google.protobuf.Duration) |  | how often we do a distribution, min = 1s |
+| name | [string](#string) |  | name of the allocator |
+| url | [string](#string) |  | url with metadata |
+| paused | [bool](#bool) |  |  |
 | address | [string](#string) |  | submodule address of the given allocator |
-| a | [StoreAllocator](#regen.divvy.v1.StoreAllocator) |  |  |
+| recipients | [Recipient](#regen.divvy.v1.Recipient) | repeated | Invariant: * sum of shares in entires must equal to 100% (1mln) list of allocation entries |
+| next_claim | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  | timestamp when anyone can call for the next time. |
 
 
 

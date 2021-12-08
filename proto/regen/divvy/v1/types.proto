@@ -55,9 +55,34 @@ message StoreRecipient {
 }
 
 message Allocator {
+  // admin is the address of the account that creates the allocator and signs
+  // the message
+  string admin = 1;
+
+  google.protobuf.Timestamp start = 2
+      [ (gogoproto.nullable) = false, (gogoproto.stdtime) = true ];
+  google.protobuf.Timestamp end = 3
+      [ (gogoproto.nullable) = false, (gogoproto.stdtime) = true ];
+  // how often we do a distribution, min = 1s
+  google.protobuf.Duration interval = 4
+      [ (gogoproto.nullable) = false, (gogoproto.stdduration) = true ];
+
+  // name of the allocator
+  string name = 5;
+  // url with metadata
+  string url = 6;
+  bool paused = 7;
+
   // submodule address of the given allocator
-  string address = 1;
-  StoreAllocator a = 2 [ (gogoproto.nullable) = false ];
+  string address = 9;
+
+  // Invariant:
+  // * sum of shares in entires must equal to 100% (1mln)
+  // list of allocation entries
+  repeated Recipient recipients = 10 [ (gogoproto.nullable) = false ];
+  // timestamp when anyone can call for the next time.
+  google.protobuf.Timestamp next_claim = 11
+      [ (gogoproto.nullable) = false, (gogoproto.stdtime) = true ];
 }
 
 message SlowReleaseStream {
