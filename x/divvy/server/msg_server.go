@@ -19,8 +19,7 @@ func (s serverImpl) CreateAllocator(goCtx context.Context, msg *divvy.MsgCreateA
 	if err != nil {
 		return nil, err
 	}
-	addr := nextAddress(s.allocatorSeq, ctx, s.allocatorAddr)
-
+	addr := nextAllocatorAddress(s.allocatorSeq, ctx, s.allocatorAddr)
 	a := divvy.StoreAllocator{
 		Admin:    msg.Admin,
 		Start:    msg.Start,
@@ -34,8 +33,8 @@ func (s serverImpl) CreateAllocator(goCtx context.Context, msg *divvy.MsgCreateA
 	if err != nil {
 		return nil, err
 	}
-	db := s.getAllocatorStore(ctx)
-	if err = save(db, addr, &a, s.cdc); err != nil {
+	err = save(s.allocatorStore(ctx), storeKey(addr), &a, s.cdc)
+	if err != nil {
 		return nil, err
 	}
 
@@ -56,13 +55,20 @@ func (s serverImpl) ClaimAllocations(goCtx context.Context, msg *divvy.MsgClaimA
 	if err != nil {
 		return nil, err
 	}
-	addr, a, err := s.getAllocator(ctx, msg.Allocator)
+	addr, key, a, err := s.getAllocator(ctx, msg.Allocator)
 	now := ctx.BlockTime()
 	if now.Before(a.NextClaim) {
 		return nil, errors.ErrInvalidRequest.Wrapf("Claim only possible after %v", a.NextClaim)
 	}
 	a.NextClaim = now.Add(a.Interval)
 	coins, err := distributeBalance(addr, a, s.bank, &ctx.Context)
+	if err != nil {
+		return nil, err
+	}
+	if err = save(ctx.KVStore(s.key), key, a, s.cdc); err != nil {
+		return nil, err
+	}
+
 	return &divvy.MsgClaimAllocationsResp{Coins: coins}, err
 }
 
@@ -78,7 +84,7 @@ func (s serverImpl) SetAllocatorRecipients(goCtx context.Context, msg *divvy.Msg
 	if err != nil {
 		return nil, err
 	}
-	addr, a, err := s.getAllocator(ctx, msg.Address)
+	_, key, a, err := s.getAllocator(ctx, msg.Address)
 	if err != nil {
 		return nil, err
 	}
@@ -86,8 +92,7 @@ func (s serverImpl) SetAllocatorRecipients(goCtx context.Context, msg *divvy.Msg
 	if err != nil {
 		return nil, err
 	}
-	db := s.getAllocatorStore(ctx)
-	return &divvy.MsgEmptyResp{}, save(db, addr, a, s.cdc)
+	return &divvy.MsgEmptyResp{}, save(ctx.KVStore(s.key), key, a, s.cdc)
 }
 
 // Removes allocator and disables all streamers!

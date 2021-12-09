@@ -100,7 +100,7 @@ func TxSetAllocatorRecipients() *cobra.Command {
 	return txflags(&cobra.Command{
 		Use:   "set-allocator-recipients [allocator_address] [recipient-map]",
 		Short: "TxSetAllocatorRecipients updates allocator recipient list. See create-allocator for inforamtion about the recipient-map format",
-		Args:  cobra.ExactArgs(1),
+		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cctx, err := sdkclient.GetClientTxContext(cmd)
 			if err != nil {

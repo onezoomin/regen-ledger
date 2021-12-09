@@ -18,7 +18,7 @@ func (s serverImpl) AllocatorByAddress(goCtx context.Context, req *divvy.QueryAl
 	if err != nil {
 		return nil, err
 	}
-	_, a, err := s.getAllocator(ctx, req.Address)
+	_, _, a, err := s.getAllocator(ctx, req.Address)
 	return storeAllocatorToAllocator(a, req.Address), err
 }
 
@@ -29,7 +29,7 @@ func (s serverImpl) Allocators(goCtx context.Context, req *divvy.QueryAllocators
 	}
 
 	var as []divvy.Allocator
-	pageResp, err := query.Paginate(s.getAllocatorStore(ctx), req.Pagination, func(key, val []byte) error {
+	pageResp, err := query.Paginate(s.allocatorStore(ctx), req.Pagination, func(key, val []byte) error {
 		var a divvy.StoreAllocator
 		if err := s.cdc.Unmarshal(val, &a); err != nil {
 			return err
