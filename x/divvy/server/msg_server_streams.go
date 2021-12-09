@@ -7,6 +7,7 @@ import (
 
 	"github.com/regen-network/regen-ledger/types"
 	"github.com/regen-network/regen-ledger/v2/x/divvy"
+	"github.com/regen-network/regen-ledger/v2/x/divvy/parse"
 )
 
 // Creates a new stream to feed an address
@@ -16,11 +17,16 @@ import (
 func (s serverImpl) CreateSlowReleaseStream(goCtx context.Context, msg *divvy.MsgCreateSlowReleaseStream) (*divvy.MsgCreateSlowReleaseStreamResp, error) {
 	ctx := types.UnwrapSDKContext(goCtx)
 	addr := nextSeqBasedAddr(s.streamSeq, ctx, s.allocatorAddr)
-	x := divvy.SlowReleaseStream{
-		Admin:       msg.Admin,
+	admin, errmsgs := parse.Address(msg.Admin, "admin", nil)
+	destination, errmsgs := parse.Address(msg.Destination, "destination", errmsgs)
+	if err := divvy.ErrorStringsToError(errmsgs); err != nil {
+		return nil, err
+	}
+	x := divvy.StoreSlowReleaseStream{
+		Admin:       admin,
 		Start:       msg.Start,
 		Interval:    msg.Interval,
-		Destination: msg.Destination,
+		Destination: destination,
 		Name:        msg.Name,
 		Paused:      false,
 		Strategy:    msg.Strategy,

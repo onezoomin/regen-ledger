@@ -14,6 +14,7 @@
     - [SlowReleaseStream](#regen.divvy.v1.SlowReleaseStream)
     - [StoreAllocator](#regen.divvy.v1.StoreAllocator)
     - [StoreRecipient](#regen.divvy.v1.StoreRecipient)
+    - [StoreSlowReleaseStream](#regen.divvy.v1.StoreSlowReleaseStream)
     - [StreamStrategy](#regen.divvy.v1.StreamStrategy)
   
 - [regen/divvy/v1/query.proto](#regen/divvy/v1/query.proto)
@@ -21,6 +22,9 @@
     - [QueryAllocators](#regen.divvy.v1.QueryAllocators)
     - [QueryAllocatorsByOwner](#regen.divvy.v1.QueryAllocatorsByOwner)
     - [QueryAllocatorsResp](#regen.divvy.v1.QueryAllocatorsResp)
+    - [QueryStream](#regen.divvy.v1.QueryStream)
+    - [QueryStreams](#regen.divvy.v1.QueryStreams)
+    - [QueryStreamsResp](#regen.divvy.v1.QueryStreamsResp)
   
     - [Query](#regen.divvy.v1.Query)
   
@@ -153,6 +157,7 @@
 | name | [string](#string) |  | name of the allocator |
 | paused | [bool](#bool) |  |  |
 | strategy | [StreamStrategy](#regen.divvy.v1.StreamStrategy) |  |  |
+| address | [string](#string) |  | submodule address of the given stream |
 
 
 
@@ -193,6 +198,27 @@
 | address | [bytes](#bytes) |  | address wallet address |
 | share | [uint32](#uint32) |  | allocation share. 100% = 1e6. |
 | name | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="regen.divvy.v1.StoreSlowReleaseStream"></a>
+
+### StoreSlowReleaseStream
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| admin | [bytes](#bytes) |  | signer and creator of the stream |
+| start | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  | when the stream starts |
+| interval | [google.protobuf.Duration](#google.protobuf.Duration) |  | how often we do a distribution |
+| destination | [bytes](#bytes) |  | Allocator address |
+| name | [string](#string) |  | name of the allocator |
+| paused | [bool](#bool) |  |  |
+| strategy | [StreamStrategy](#regen.divvy.v1.StreamStrategy) |  |  |
 
 
 
@@ -291,6 +317,52 @@
 
 
 
+
+<a name="regen.divvy.v1.QueryStream"></a>
+
+### QueryStream
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| address | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="regen.divvy.v1.QueryStreams"></a>
+
+### QueryStreams
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| pagination | [cosmos.base.query.v1beta1.PageRequest](#cosmos.base.query.v1beta1.PageRequest) |  | pagination defines an optional pagination for the request. |
+
+
+
+
+
+
+<a name="regen.divvy.v1.QueryStreamsResp"></a>
+
+### QueryStreamsResp
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| streams | [SlowReleaseStream](#regen.divvy.v1.SlowReleaseStream) | repeated |  |
+| pagination | [cosmos.base.query.v1beta1.PageResponse](#cosmos.base.query.v1beta1.PageResponse) |  | pagination defines the pagination in the response. |
+
+
+
+
+
  <!-- end messages -->
 
  <!-- end enums -->
@@ -308,6 +380,8 @@ Msg is the divvy Msg service.
 | AllocatorByAddress | [QueryAllocator](#regen.divvy.v1.QueryAllocator) | [Allocator](#regen.divvy.v1.Allocator) |  |
 | Allocators | [QueryAllocators](#regen.divvy.v1.QueryAllocators) | [QueryAllocatorsResp](#regen.divvy.v1.QueryAllocatorsResp) |  |
 | AllocatorsByOwner | [QueryAllocatorsByOwner](#regen.divvy.v1.QueryAllocatorsByOwner) | [QueryAllocatorsResp](#regen.divvy.v1.QueryAllocatorsResp) |  |
+| StreamByAddress | [QueryStream](#regen.divvy.v1.QueryStream) | [SlowReleaseStream](#regen.divvy.v1.SlowReleaseStream) |  |
+| Streams | [QueryStreams](#regen.divvy.v1.QueryStreams) | [QueryStreamsResp](#regen.divvy.v1.QueryStreamsResp) |  |
 
  <!-- end services -->
 

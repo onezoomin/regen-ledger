@@ -66,6 +66,25 @@ func getAllocatorKey(allocatorAddr string) ([]byte, error) {
 	return subKeyFromAddr(allocatorTablePrefix, allocatorAddr)
 }
 
+// selects alocator based on bech32 address
+func (s serverImpl) getSlowReleaseStream(ctx orm.HasKVStore, address string) (sdk.AccAddress, storeKey, *divvy.StoreSlowReleaseStream, error) {
+	key, err := getSlowReleaseStreamKey(address)
+	if err != nil {
+		return nil, nil, nil, err
+	}
+	bz := ctx.KVStore(s.key).Get(key)
+	if bz == nil {
+		return nil, nil, nil, sdkerrors.ErrNotFound.Wrapf("key not found: %q", key)
+	}
+	var a divvy.StoreSlowReleaseStream
+	return key, key, &a, s.cdc.Unmarshal(bz, &a)
+}
+
+// Creates a fully qualified (with table prefix) store key based on stream bech32 address
+func getSlowReleaseStreamKey(streamAddr string) ([]byte, error) {
+	return subKeyFromAddr(streamTablePrefix, streamAddr)
+}
+
 func subKeyFromAddr(prefix []byte, addr string) ([]byte, error) {
 	a, err := sdk.AccAddressFromBech32(addr)
 	if err != nil {

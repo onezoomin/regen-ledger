@@ -26,22 +26,3 @@ func storeRecipientToRecipient(r *divvy.StoreRecipient) divvy.Recipient {
 		Name:    r.Name,
 	}
 }
-
-func storeAllocatorToAllocator(as *divvy.StoreAllocator, addr string) *divvy.Allocator {
-	rs := make([]divvy.Recipient, len(as.Recipients))
-	for i := range as.Recipients {
-		rs[i] = storeRecipientToRecipient(&as.Recipients[i])
-	}
-	return &divvy.Allocator{
-		Admin:      as.Admin,
-		Start:      as.Start,
-		End:        as.End,
-		Interval:   as.Interval,
-		Name:       as.Name,
-		Url:        as.Url,
-		Paused:     as.Paused,
-		Address:    addr,
-		Recipients: rs,
-		NextClaim:  as.NextClaim,
-	}
-}

@@ -85,6 +85,26 @@ message Allocator {
       [ (gogoproto.nullable) = false, (gogoproto.stdtime) = true ];
 }
 
+message StoreSlowReleaseStream {
+  // signer and creator of the stream
+  bytes admin = 1;
+
+  // when the stream starts
+  google.protobuf.Timestamp start = 2
+      [ (gogoproto.nullable) = false, (gogoproto.stdtime) = true ];
+  // how often we do a distribution
+  google.protobuf.Duration interval = 3
+      [ (gogoproto.nullable) = false, (gogoproto.stdduration) = true ];
+  // Allocator address
+  bytes destination = 4;
+
+  // name of the allocator
+  string name = 5;
+  bool paused = 6;
+
+  StreamStrategy strategy = 7 [ (gogoproto.nullable) = false ];
+}
+
 message SlowReleaseStream {
   // signer and creator of the stream
   string admin = 1;
@@ -101,8 +121,10 @@ message SlowReleaseStream {
   // name of the allocator
   string name = 5;
   bool paused = 6;
+  StreamStrategy strategy = 7 [ (gogoproto.nullable) = false ];
 
-  StreamStrategy strategy = 10 [ (gogoproto.nullable) = false ];
+  // submodule address of the given stream
+  string address = 10;
 }
 
 message StreamStrategy {

@@ -7,6 +7,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	"github.com/regen-network/regen-ledger/v2/x/divvy"
+	"github.com/regen-network/regen-ledger/v2/x/divvy/parse"
 	"github.com/spf13/cobra"
 )
 
@@ -49,10 +50,10 @@ func TxCreateAllocator() *cobra.Command {
 			}
 
 			var errmsgs []string
-			startTime, errmsgs := parseTime(args[2], "startTime", errmsgs)
-			endTime, errmsgs := parseTime(args[3], "endTime", errmsgs)
-			interval, errmsgs := parseUint(args[4], "interval", errmsgs)
-			recipients, errmsgs := parseRecipient(args[5], errmsgs)
+			startTime, errmsgs := parse.Time(args[2], "startTime", errmsgs)
+			endTime, errmsgs := parse.Time(args[3], "endTime", errmsgs)
+			interval, errmsgs := parse.Uint(args[4], "interval", errmsgs)
+			recipients, errmsgs := parse.Recipient(args[5], errmsgs)
 			if err := divvy.ErrorStringsToError(errmsgs); err != nil {
 				return err
 			}
@@ -108,7 +109,7 @@ func TxSetAllocatorRecipients() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			recipients, errmsgs := parseRecipient(args[1], nil)
+			recipients, errmsgs := parse.Recipient(args[1], nil)
 			if err = divvy.ErrorStringsToError(errmsgs); err != nil {
 				return err
 			}
@@ -136,9 +137,8 @@ func TxCreateSlowReleaseStream() *cobra.Command {
 				return err
 			}
 
-			var errmsgs []string
-			startTime, errmsgs := parseTime(args[1], "startTime", errmsgs)
-			interval, errmsgs := parseUint(args[2], "interval", errmsgs)
+			startTime, errmsgs := parse.Time(args[1], "startTime", nil)
+			interval, errmsgs := parse.Uint(args[2], "interval", errmsgs)
 			if err := divvy.ErrorStringsToError(errmsgs); err != nil {
 				return err
 			}

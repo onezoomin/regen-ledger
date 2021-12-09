@@ -25,6 +25,17 @@ service Query {
     option (google.api.http).get = "/regen/divvy/v1/allocators/owner/{owner}";
   }
 
+  //
+  // STREAM
+
+  rpc StreamByAddress(QueryStream) returns (SlowReleaseStream) {
+    option (google.api.http).get = "/regen/divvy/v1/stream/{address}";
+  }
+
+  rpc Streams(QueryStreams) returns (QueryStreamsResp) {
+    option (google.api.http).get = "/regen/divvy/v1/streams";
+  }
+
   // Queries:
   // + Get streams by owner
 }
@@ -46,4 +57,21 @@ message QueryAllocatorsByOwner {
   string owner = 1;
   // pagination defines an optional pagination for the request.
   cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+//
+// STREAM
+//
+
+message QueryStream { string address = 1; }
+
+message QueryStreams {
+  // pagination defines an optional pagination for the request.
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryStreamsResp {
+  repeated SlowReleaseStream streams = 1 [ (gogoproto.nullable) = false ];
+  // pagination defines the pagination in the response.
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
