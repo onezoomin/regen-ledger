@@ -24,6 +24,8 @@ func TxCmd(name string) *cobra.Command {
 		TxCreateAllocator(),
 		TxClaimAllocator(),
 		TxSetAllocatorRecipients(),
+
+		TxCreateSlowReleaseStream(),
 	)
 	return cmd
 }
@@ -114,6 +116,44 @@ func TxSetAllocatorRecipients() *cobra.Command {
 				Sender:     cctx.GetFromAddress().String(),
 				Address:    args[0],
 				Recipients: recipients}
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+			return tx.GenerateOrBroadcastTxCLI(cctx, cmd.Flags(), &msg)
+		},
+	})
+}
+
+// TxCreateAllocator returns a transaction command that creates a new allocator.
+func TxCreateSlowReleaseStream() *cobra.Command {
+	return txflags(&cobra.Command{
+		Use:   "create-slow-release-stream [name] [startTime] [interval] [destination] [amount]",
+		Short: "Creates a new slow release stream which releases `amount` of tokens in the balance every `interval` amount of seconds. Creator will be the admin of the stream.",
+		Args:  cobra.ExactArgs(5),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			cctx, err := sdkclient.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			var errmsgs []string
+			startTime, errmsgs := parseTime(args[1], "startTime", errmsgs)
+			interval, errmsgs := parseUint(args[2], "interval", errmsgs)
+			if err := divvy.ErrorStringsToError(errmsgs); err != nil {
+				return err
+			}
+
+			msg := divvy.MsgCreateSlowReleaseStream{
+				Admin:       cctx.GetFromAddress().String(), // --from flagadmin.String(),
+				Start:       startTime,
+				Interval:    time.Duration(interval) * time.Second,
+				Name:        args[0],
+				Destination: args[3],
+				Paused:      false,
+				Strategy: divvy.StreamStrategy{
+					Strategy: &divvy.StreamStrategy_FixedAmount{FixedAmount: args[4]},
+				},
+			}
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

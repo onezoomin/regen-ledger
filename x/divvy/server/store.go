@@ -30,11 +30,10 @@ type Sequence interface {
 	NextVal(ctx orm.HasKVStore) uint64
 }
 
-func nextAllocatorAddress(seq Sequence, ctx orm.HasKVStore, parentAddr sdk.Address) sdk.AccAddress {
+func nextSeqBasedAddr(seq Sequence, ctx orm.HasKVStore, parentAddr sdk.Address) sdk.AccAddress {
 	id := seq.NextVal(ctx)
 	var idbz = make([]byte, 8)
 	binary.BigEndian.PutUint64(idbz, id)
-
 	return address.Derive(parentAddr.Bytes(), idbz)
 }
 
@@ -48,6 +47,7 @@ func (s serverImpl) streamStore(ctx orm.HasKVStore) sdk.KVStore {
 	return prefix.NewStore(d, streamTablePrefix)
 }
 
+// selects alocator based on bech32 address
 func (s serverImpl) getAllocator(ctx orm.HasKVStore, address string) (sdk.AccAddress, storeKey, *divvy.StoreAllocator, error) {
 	key, err := getAllocatorKey(address)
 	if err != nil {

@@ -102,10 +102,14 @@ message SlowReleaseStream {
   string name = 5;
   bool paused = 6;
 
+  StreamStrategy strategy = 10 [ (gogoproto.nullable) = false ];
+}
+
+message StreamStrategy {
   oneof strategy {
     // fixed amount of tokens streamed in each round. If there is a zero balance
     // available then then nothing will be streamed. If only fraction is
     // available then the it will be fully streamed.
-    string fixed_amount = 10;
+    string fixed_amount = 1;
   }
 }

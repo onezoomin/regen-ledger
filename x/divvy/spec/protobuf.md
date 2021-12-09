@@ -14,6 +14,7 @@
     - [SlowReleaseStream](#regen.divvy.v1.SlowReleaseStream)
     - [StoreAllocator](#regen.divvy.v1.StoreAllocator)
     - [StoreRecipient](#regen.divvy.v1.StoreRecipient)
+    - [StreamStrategy](#regen.divvy.v1.StreamStrategy)
   
 - [regen/divvy/v1/query.proto](#regen/divvy/v1/query.proto)
     - [QueryAllocator](#regen.divvy.v1.QueryAllocator)
@@ -151,7 +152,7 @@
 | destination | [string](#string) |  | Allocator address |
 | name | [string](#string) |  | name of the allocator |
 | paused | [bool](#bool) |  |  |
-| fixed_amount | [string](#string) |  | fixed amount of tokens streamed in each round. If there is a zero balance available then then nothing will be streamed. If only fraction is available then the it will be fully streamed. |
+| strategy | [StreamStrategy](#regen.divvy.v1.StreamStrategy) |  |  |
 
 
 
@@ -192,6 +193,21 @@
 | address | [bytes](#bytes) |  | address wallet address |
 | share | [uint32](#uint32) |  | allocation share. 100% = 1e6. |
 | name | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="regen.divvy.v1.StreamStrategy"></a>
+
+### StreamStrategy
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| fixed_amount | [string](#string) |  | fixed amount of tokens streamed in each round. If there is a zero balance available then then nothing will be streamed. If only fraction is available then the it will be fully streamed. |
 
 
 
@@ -382,9 +398,10 @@ MsgCreateClassResponse is the Msg/CreateAllocator response type.
 | admin | [string](#string) |  | signer and creator of the stream |
 | start | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  | when the stream starts |
 | interval | [google.protobuf.Duration](#google.protobuf.Duration) |  | how often we do a distribution |
+| name | [string](#string) |  |  |
 | destination | [string](#string) |  | Allocator address |
 | paused | [bool](#bool) |  | when paused, stream won't send funds |
-| fixed_amount | [string](#string) |  | fixed amount of tokens streamed in each round. If there is a zero balance available then then nothing will be streamed. If only fraction is available then the it will be fully streamed. |
+| strategy | [StreamStrategy](#regen.divvy.v1.StreamStrategy) |  |  |
 
 
 
@@ -419,9 +436,10 @@ Msg/CreateSlowReleaseStreamResp
 | sender | [string](#string) |  | sender must the the Stream admin |
 | start | [google.protobuf.Timestamp](#google.protobuf.Timestamp) |  | when the stream starts |
 | interval | [google.protobuf.Duration](#google.protobuf.Duration) |  | how often we do a distribution |
+| name | [string](#string) |  |  |
 | destination | [string](#string) |  | Allocator address |
 | paused | [bool](#bool) |  | when paused, stream won't send funds |
-| fixed_amount | [string](#string) |  | fixed amount of tokens streamed in each round. If there is a zero balance available then then nothing will be streamed. If only fraction is available then the it will be fully streamed. |
+| strategy | [StreamStrategy](#regen.divvy.v1.StreamStrategy) |  |  |
 
 
 

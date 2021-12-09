@@ -153,17 +153,14 @@ message MsgCreateSlowReleaseStream {
   // how often we do a distribution
   google.protobuf.Duration interval = 4
       [ (gogoproto.nullable) = false, (gogoproto.stdduration) = true ];
-  // Allocator address
-  string destination = 5;
-  // when paused, stream won't send funds
-  bool paused = 6;
 
-  oneof strategy {
-    // fixed amount of tokens streamed in each round. If there is a zero balance
-    // available then then nothing will be streamed. If only fraction is
-    // available then the it will be fully streamed.
-    string fixed_amount = 10;
-  }
+  string name = 5;
+  // Allocator address
+  string destination = 6;
+  // when paused, stream won't send funds
+  bool paused = 7;
+
+  StreamStrategy strategy = 10 [ (gogoproto.nullable) = false ];
 }
 
 // MsgCreateSlowReleaseStreamResp is response for
@@ -195,15 +192,12 @@ message MsgEditSlowReleaseStream {
   // how often we do a distribution
   google.protobuf.Duration interval = 4
       [ (gogoproto.nullable) = false, (gogoproto.stdduration) = true ];
-  // Allocator address
-  string destination = 5;
-  // when paused, stream won't send funds
-  bool paused = 6;
 
-  oneof strategy {
-    // fixed amount of tokens streamed in each round. If there is a zero balance
-    // available then then nothing will be streamed. If only fraction is
-    // available then the it will be fully streamed.
-    string fixed_amount = 10;
-  }
+  string name = 5;
+  // Allocator address
+  string destination = 6;
+  // when paused, stream won't send funds
+  bool paused = 7;
+
+  StreamStrategy strategy = 10;
 }

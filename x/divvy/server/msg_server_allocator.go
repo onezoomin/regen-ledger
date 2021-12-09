@@ -19,7 +19,7 @@ func (s serverImpl) CreateAllocator(goCtx context.Context, msg *divvy.MsgCreateA
 	if err != nil {
 		return nil, err
 	}
-	addr := nextAllocatorAddress(s.allocatorSeq, ctx, s.allocatorAddr)
+	addr := nextSeqBasedAddr(s.allocatorSeq, ctx, s.allocatorAddr)
 	a := divvy.StoreAllocator{
 		Admin:    msg.Admin,
 		Start:    msg.Start,
@@ -132,21 +132,5 @@ func (s serverImpl) RemoveAllocator(goCtx context.Context, msg *divvy.MsgRemoveA
 	ctx.KVStore(s.key).Delete(key)
 	return &divvy.MsgEmptyResp{}, nil
 
-	panic("not implemented") // TODO: Implement
-}
-
-// Creates a new stream to feed an address
-// User creates a stream. Parameters:
-// * % of total amount to be streamed to allocator every second.
-// * destination address where the stream will go (ideally allocator)
-func (s serverImpl) CreateSlowReleaseStream(goCtx context.Context, msg *divvy.MsgCreateSlowReleaseStream) (*divvy.MsgCreateSlowReleaseStreamResp, error) {
-	panic("not implemented") // TODO: Implement
-}
-
-func (s serverImpl) PauseSlowReleaseStream(goCtx context.Context, msg *divvy.MsgPauseSlowReleaseStream) (*divvy.MsgEmptyResp, error) {
-	panic("not implemented") // TODO: Implement
-}
-
-func (s serverImpl) EditSlowReleaseStream(goCtx context.Context, msg *divvy.MsgEditSlowReleaseStream) (*divvy.MsgEmptyResp, error) {
 	panic("not implemented") // TODO: Implement
 }
