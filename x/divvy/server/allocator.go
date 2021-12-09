@@ -2,7 +2,7 @@ package server
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	// sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/cosmos/cosmos-sdk/types/errors"
 
 	// "github.com/regen-network/regen-ledger/types"
 	"github.com/regen-network/regen-ledger/v2/x/divvy"
@@ -25,4 +25,12 @@ func distributeBalance(addr sdk.AccAddress, a *divvy.StoreAllocator, bank divvy.
 		}
 	}
 	return coins, nil
+}
+
+// returns error if sender is not allocator admin
+func assertAllocatorAdmin(sender string, a *divvy.StoreAllocator) error {
+	if a.Admin != sender {
+		return errors.ErrUnauthorized
+	}
+	return nil
 }

@@ -29,7 +29,7 @@ service Msg {
   rpc SetAllocatorRecipients(MsgSetAllocatorRecipients) returns (MsgEmptyResp);
 
   // Removes allocator and disables all streamers!
-  rpc RemoveAllocator(MsgRemoveAllocator) returns (MsgCreateAllocatorResp);
+  rpc RemoveAllocator(MsgRemoveAllocator) returns (MsgEmptyResp);
 
   rpc ClaimAllocations(MsgClaimAllocations) returns (MsgClaimAllocationsResp);
 

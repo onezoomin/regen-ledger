@@ -82,7 +82,6 @@ func save(db sdk.KVStore, key storeKey, o codec.ProtoMarshaler, cdc codec.Binary
 	if err != nil {
 		return err
 	}
-	fmt.Printf(">>> Saving %v\n\n", key)
 	db.Set(key, bz)
 	return nil
 }

@@ -61,6 +61,15 @@ func (msg MsgUpdateAllocatorSetting) ValidateBasic() error {
 	return ErrorStringsToError(errs)
 }
 
+// Validate makes all additional validation (not present in ValidateBasic)
+func (msg MsgUpdateAllocatorSetting) Validate(ctx types.Context) error {
+	t := ctx.BlockTime()
+	if msg.End.Before(t) {
+		return fmt.Errorf("`end` must be after current block time (%v)", t)
+	}
+	return nil
+}
+
 /****************
   MsgSetAllocationMap
   /**************/

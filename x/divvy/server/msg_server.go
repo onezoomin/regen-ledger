@@ -74,7 +74,28 @@ func (s serverImpl) ClaimAllocations(goCtx context.Context, msg *divvy.MsgClaimA
 
 // Updates all allocator settings except admin and entry map.
 func (s serverImpl) UpdateAllocatorSetting(goCtx context.Context, msg *divvy.MsgUpdateAllocatorSetting) (*divvy.MsgEmptyResp, error) {
-	panic("not implemented") // TODO: Implement
+	ctx, err := unwrapAndCheck(goCtx, msg)
+	if err != nil {
+		return nil, err
+	}
+	if err = msg.Validate(ctx); err != nil {
+		return nil, err
+	}
+
+	_, key, a, err := s.getAllocator(ctx, msg.Address)
+	if err != nil {
+		return nil, err
+	}
+	if err = assertAllocatorAdmin(msg.Sender, a); err != nil {
+		return nil, err
+	}
+	a.Start = msg.Start
+	a.End = msg.End
+	a.Interval = msg.Interval
+	a.Name = msg.Name
+	a.Url = msg.Url
+	err = save(ctx.KVStore(s.key), key, a, s.cdc)
+	return &divvy.MsgEmptyResp{}, err
 }
 
 // Allocator owner can update the recipient list by setting a new
@@ -96,7 +117,21 @@ func (s serverImpl) SetAllocatorRecipients(goCtx context.Context, msg *divvy.Msg
 }
 
 // Removes allocator and disables all streamers!
-func (s serverImpl) RemoveAllocator(goCtx context.Context, msg *divvy.MsgRemoveAllocator) (*divvy.MsgCreateAllocatorResp, error) {
+func (s serverImpl) RemoveAllocator(goCtx context.Context, msg *divvy.MsgRemoveAllocator) (*divvy.MsgEmptyResp, error) {
+	ctx, err := unwrapAndCheck(goCtx, msg)
+	if err != nil {
+		return nil, err
+	}
+	_, key, a, err := s.getAllocator(ctx, msg.Address)
+	if err != nil {
+		return nil, err
+	}
+	if err = assertAllocatorAdmin(msg.Sender, a); err != nil {
+		return nil, err
+	}
+	ctx.KVStore(s.key).Delete(key)
+	return &divvy.MsgEmptyResp{}, nil
+
 	panic("not implemented") // TODO: Implement
 }
 
