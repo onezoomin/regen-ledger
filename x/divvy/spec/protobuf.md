@@ -35,7 +35,7 @@
     - [MsgPauseSlowReleaseStream](#regen.divvy.v1.MsgPauseSlowReleaseStream)
     - [MsgRemoveAllocator](#regen.divvy.v1.MsgRemoveAllocator)
     - [MsgSetAllocatorRecipients](#regen.divvy.v1.MsgSetAllocatorRecipients)
-    - [MsgUpdateAllocatorSetting](#regen.divvy.v1.MsgUpdateAllocatorSetting)
+    - [MsgUpdateAllocatorSettings](#regen.divvy.v1.MsgUpdateAllocatorSettings)
   
     - [Msg](#regen.divvy.v1.Msg)
   
@@ -488,9 +488,9 @@ Msg/CreateSlowReleaseStreamResp
 
 
 
-<a name="regen.divvy.v1.MsgUpdateAllocatorSetting"></a>
+<a name="regen.divvy.v1.MsgUpdateAllocatorSettings"></a>
 
-### MsgUpdateAllocatorSetting
+### MsgUpdateAllocatorSettings
 
 
 
@@ -523,7 +523,7 @@ Msg is the divvy Msg service.
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
 | CreateAllocator | [MsgCreateAllocator](#regen.divvy.v1.MsgCreateAllocator) | [MsgCreateAllocatorResp](#regen.divvy.v1.MsgCreateAllocatorResp) | Allocator is a distribution engine, which "divvys out" all incoming funds, at configurable time intervals to all registered recipients. Each allocator has only one owner. Ideally this can be managed by a group module. |
-| UpdateAllocatorSetting | [MsgUpdateAllocatorSetting](#regen.divvy.v1.MsgUpdateAllocatorSetting) | [MsgEmptyResp](#regen.divvy.v1.MsgEmptyResp) | Updates all allocator settings except admin and recipient map. |
+| UpdateAllocatorSettings | [MsgUpdateAllocatorSettings](#regen.divvy.v1.MsgUpdateAllocatorSettings) | [MsgEmptyResp](#regen.divvy.v1.MsgEmptyResp) | Updates all allocator settings except admin and recipient map. |
 | SetAllocatorRecipients | [MsgSetAllocatorRecipients](#regen.divvy.v1.MsgSetAllocatorRecipients) | [MsgEmptyResp](#regen.divvy.v1.MsgEmptyResp) | Allocator owner can update the recipient list by setting a new allocation map. |
 | RemoveAllocator | [MsgRemoveAllocator](#regen.divvy.v1.MsgRemoveAllocator) | [MsgEmptyResp](#regen.divvy.v1.MsgEmptyResp) | Removes allocator and disables all streamers! |
 | ClaimAllocations | [MsgClaimAllocations](#regen.divvy.v1.MsgClaimAllocations) | [MsgClaimAllocationsResp](#regen.divvy.v1.MsgClaimAllocationsResp) |  |

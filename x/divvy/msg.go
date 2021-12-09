@@ -10,7 +10,7 @@ import (
 )
 
 var _ sdk.Msg = &MsgCreateAllocator{}
-var _ sdk.Msg = &MsgUpdateAllocatorSetting{}
+var _ sdk.Msg = &MsgUpdateAllocatorSettings{}
 var _ sdk.Msg = &MsgSetAllocatorRecipients{}
 var _ sdk.Msg = &MsgRemoveAllocator{}
 var _ sdk.Msg = &MsgClaimAllocations{}
@@ -49,11 +49,11 @@ func (msg MsgCreateAllocator) Validate(ctx types.Context) error {
   MsgUpdateAllocatorSetting
   /**************/
 
-func (msg MsgUpdateAllocatorSetting) GetSigners() []sdk.AccAddress {
+func (msg MsgUpdateAllocatorSettings) GetSigners() []sdk.AccAddress {
 	return getSingers(msg.Sender)
 }
 
-func (msg MsgUpdateAllocatorSetting) ValidateBasic() error {
+func (msg MsgUpdateAllocatorSettings) ValidateBasic() error {
 	errs := checkAllocatorTimestamps(msg.Start, msg.End, msg.Interval, msg.Name)
 	if _, err := sdk.AccAddressFromBech32(msg.Sender); err != nil {
 		errs = append(errs, fmt.Sprintf("Malformed admin address [%s]", err.Error()))
@@ -62,7 +62,7 @@ func (msg MsgUpdateAllocatorSetting) ValidateBasic() error {
 }
 
 // Validate makes all additional validation (not present in ValidateBasic)
-func (msg MsgUpdateAllocatorSetting) Validate(ctx types.Context) error {
+func (msg MsgUpdateAllocatorSettings) Validate(ctx types.Context) error {
 	t := ctx.BlockTime()
 	if msg.End.Before(t) {
 		return fmt.Errorf("`end` must be after current block time (%v)", t)

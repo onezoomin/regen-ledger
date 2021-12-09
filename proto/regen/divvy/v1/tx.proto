@@ -22,7 +22,8 @@ service Msg {
   rpc CreateAllocator(MsgCreateAllocator) returns (MsgCreateAllocatorResp);
 
   // Updates all allocator settings except admin and recipient map.
-  rpc UpdateAllocatorSetting(MsgUpdateAllocatorSetting) returns (MsgEmptyResp);
+  rpc UpdateAllocatorSettings(MsgUpdateAllocatorSettings)
+      returns (MsgEmptyResp);
 
   // Allocator owner can update the recipient list by setting a new
   // allocation map.
@@ -86,7 +87,7 @@ message MsgCreateAllocatorResp {
   string address = 1;
 }
 
-message MsgUpdateAllocatorSetting {
+message MsgUpdateAllocatorSettings {
   // address of the allocator
   string address = 1;
 

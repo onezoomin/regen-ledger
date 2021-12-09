@@ -73,7 +73,7 @@ func (s serverImpl) ClaimAllocations(goCtx context.Context, msg *divvy.MsgClaimA
 }
 
 // Updates all allocator settings except admin and entry map.
-func (s serverImpl) UpdateAllocatorSetting(goCtx context.Context, msg *divvy.MsgUpdateAllocatorSetting) (*divvy.MsgEmptyResp, error) {
+func (s serverImpl) UpdateAllocatorSettings(goCtx context.Context, msg *divvy.MsgUpdateAllocatorSettings) (*divvy.MsgEmptyResp, error) {
 	ctx, err := unwrapAndCheck(goCtx, msg)
 	if err != nil {
 		return nil, err
