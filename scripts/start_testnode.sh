@@ -39,7 +39,7 @@ if [[ $OS == "Linux"* ]]; then
     echo "Your OS is a Linux variant..."
     sed -i "s/stake/uregen/g" ~/.regen/config/genesis.json || exit_with_error "Error: Could not update staking token"
 
-    sed -i "s/enabled = false/enabled = true/g" ~/.regen/config/app.toml || exit_with_error "Error: Could not update app.toml"
+    sed -i "s/enable = false/enable = true/g" ~/.regen/config/app.toml || exit_with_error "Error: Could not update app.toml"
     sed -i "s/enabled-unsafe-cors = false/enabled-unsafe-cors = true/g" ~/.regen/config/app.toml || exit_with_error "Error: Could not update app.toml"
     sed -i "s/cors_allowed_origins = \[\]/cors_allowed_origins = \[\"\*\"\]/g" ~/.regen/config/config.toml || exit_with_error "Error: Could not update config.toml"
 
@@ -47,7 +47,7 @@ elif [[ $OS == "Darwin"* ]]; then
     echo "Your OS is Mac OS/darwin..."
     sed -i "" "s/stake/uregen/g" ~/.regen/config/genesis.json || exit_with_error "Error: Could not update staking token"
 
-    sed -i "" "s/enabled = false/enabled = true/g" ~/.regen/config/app.toml || exit_with_error "Error: Could not update app.toml"
+    sed -i "" "s/enable = false/enable = true/g" ~/.regen/config/app.toml || exit_with_error "Error: Could not update app.toml"
     sed -i "" "s/enabled-unsafe-cors = false/enabled-unsafe-cors = true/g" ~/.regen/config/app.toml || exit_with_error "Error: Could not update app.toml"
     sed -i "" "s/cors_allowed_origins = \[\]/cors_allowed_origins = \[\"\*\"\]/g" ~/.regen/config/config.toml || exit_with_error "Error: Could not update config.toml"
 else
