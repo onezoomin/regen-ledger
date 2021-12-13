@@ -56,6 +56,9 @@ func (s serverImpl) ClaimAllocations(goCtx context.Context, msg *divvy.MsgClaimA
 		return nil, err
 	}
 	addr, key, a, err := s.getAllocator(ctx, msg.Allocator)
+	if err != nil {
+		return nil, err
+	}
 	now := ctx.BlockTime()
 	if now.Before(a.NextClaim) {
 		return nil, errors.ErrInvalidRequest.Wrapf("Claim only possible after %v", a.NextClaim)

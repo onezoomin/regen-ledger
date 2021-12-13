@@ -15,7 +15,7 @@ func distributeBalance(addr sdk.AccAddress, a *divvy.StoreAllocator, bank divvy.
 	coins := bank.GetAllBalances(*ctx, addr)
 	for _, r := range a.Recipients {
 		out := make(sdk.Coins, len(coins))
-		// TODO: maybe reorder the loop to optimize the computation
+		// TODO: maybe reorder the loop to optimize the `amount` computation
 		for i, c := range coins {
 			out[i].Denom = c.Denom
 			out[i].Amount = c.Amount.Mul(sdk.NewIntFromUint64(uint64(r.Share))).Quo(totalShares)

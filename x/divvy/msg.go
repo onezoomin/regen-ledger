@@ -102,7 +102,10 @@ func (msg MsgClaimAllocations) GetSigners() []sdk.AccAddress {
 
 func (msg MsgClaimAllocations) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Allocator)
-	return errors.ErrInvalidAddress.Wrapf("allocator_address [%v]", err)
+	if err != nil {
+		return errors.ErrInvalidAddress.Wrapf("allocator_address XXXX [%v]", err)
+	}
+	return err
 }
 
 /****************

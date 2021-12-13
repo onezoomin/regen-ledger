@@ -49,7 +49,7 @@ func (s serverImpl) streamStore(ctx orm.HasKVStore) sdk.KVStore {
 
 // selects alocator based on bech32 address
 func (s serverImpl) getAllocator(ctx orm.HasKVStore, address string) (sdk.AccAddress, storeKey, *divvy.StoreAllocator, error) {
-	key, err := getAllocatorKey(address)
+	addr, key, err := subKeyFromAddr(allocatorTablePrefix, address)
 	if err != nil {
 		return nil, nil, nil, err
 	}
@@ -58,17 +58,12 @@ func (s serverImpl) getAllocator(ctx orm.HasKVStore, address string) (sdk.AccAdd
 		return nil, nil, nil, sdkerrors.ErrNotFound.Wrapf("key not found: %q", key)
 	}
 	var a divvy.StoreAllocator
-	return key, key, &a, s.cdc.Unmarshal(bz, &a)
-}
-
-// Creates a fully qualified (with table prefix) store key based on allocator bech32 address
-func getAllocatorKey(allocatorAddr string) ([]byte, error) {
-	return subKeyFromAddr(allocatorTablePrefix, allocatorAddr)
+	return addr, key, &a, s.cdc.Unmarshal(bz, &a)
 }
 
 // selects alocator based on bech32 address
 func (s serverImpl) getSlowReleaseStream(ctx orm.HasKVStore, address string) (sdk.AccAddress, storeKey, *divvy.StoreSlowReleaseStream, error) {
-	key, err := getSlowReleaseStreamKey(address)
+	addr, key, err := subKeyFromAddr(streamTablePrefix, address)
 	if err != nil {
 		return nil, nil, nil, err
 	}
@@ -77,22 +72,17 @@ func (s serverImpl) getSlowReleaseStream(ctx orm.HasKVStore, address string) (sd
 		return nil, nil, nil, sdkerrors.ErrNotFound.Wrapf("key not found: %q", key)
 	}
 	var a divvy.StoreSlowReleaseStream
-	return key, key, &a, s.cdc.Unmarshal(bz, &a)
+	return addr, key, &a, s.cdc.Unmarshal(bz, &a)
 }
 
-// Creates a fully qualified (with table prefix) store key based on stream bech32 address
-func getSlowReleaseStreamKey(streamAddr string) ([]byte, error) {
-	return subKeyFromAddr(streamTablePrefix, streamAddr)
-}
-
-func subKeyFromAddr(prefix []byte, addr string) ([]byte, error) {
+func subKeyFromAddr(prefix []byte, addr string) (sdk.AccAddress, []byte, error) {
 	a, err := sdk.AccAddressFromBech32(addr)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	key := make([]byte, 0, len(prefix)+len(a))
 	key = append(key, prefix...)
-	return append(key, a...), nil
+	return a, append(key, a...), nil
 }
 
 func save(db sdk.KVStore, key storeKey, o codec.ProtoMarshaler, cdc codec.BinaryCodec) error {
